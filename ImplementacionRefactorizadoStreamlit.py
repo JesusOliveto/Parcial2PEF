@@ -13,46 +13,46 @@ from CodigoRefactorizado import GameStatistics, PlayerStats, simulate_dice_game
 
 ASCII_DICE = {
 	1: (
-		"┌─────┐",
-		"│     │",
-		"│  ●  │",
-		"│     │",
-		"└─────┘",
+		"┌───────┐",
+		"│       │",
+		"│   ●   │",
+		"│       │",
+		"└───────┘",
 	),
 	2: (
-		"┌─────┐",
-		"│●    │",
-		"│     │",
-		"│    ●│",
-		"└─────┘",
+		"┌───────┐",
+		"│ ●     │",
+		"│       │",
+		"│     ● │",
+		"└───────┘",
 	),
 	3: (
-		"┌─────┐",
-		"│●    │",
-		"│  ●  │",
-		"│    ●│",
-		"└─────┘",
+		"┌───────┐",
+		"│ ●     │",
+		"│   ●   │",
+		"│     ● │",
+		"└───────┘",
 	),
 	4: (
-		"┌─────┐",
-		"│●   ●│",
-		"│     │",
-		"│●   ●│",
-		"└─────┘",
+		"┌───────┐",
+		"│ ●   ● │",
+		"│       │",
+		"│ ●   ● │",
+		"└───────┘",
 	),
 	5: (
-		"┌─────┐",
-		"│●   ●│",
-		"│  ●  │",
-		"│●   ●│",
-		"└─────┘",
+		"┌───────┐",
+		"│ ●   ● │",
+		"│   ●   │",
+		"│ ●   ● │",
+		"└───────┘",
 	),
 	6: (
-		"┌─────┐",
-		"│●   ●│",
-		"│●   ●│",
-		"│●   ●│",
-		"└─────┘",
+		"┌───────┐",
+		"│ ●   ● │",
+		"│ ●   ● │",
+		"│ ●   ● │",
+		"└───────┘",
 	),
 }
 
@@ -221,15 +221,7 @@ def main() -> None:
 
 	st.sidebar.markdown("---")
 	st.sidebar.write(f"Vista actual: **{st.session_state['vista'].capitalize()}**")
-	st.sidebar.markdown(
-		"""
-		**Consejos rápidos:**
 
-		- `python CodigoRefactorizado.py --profile`
-		- `kernprof -l -v CodigoRefactorizado.py`
-		- `python CodigoRefactorizado.py --timeit`
-		"""
-	)
 
 	if st.session_state["vista"] == "simulacion":
 		_render_simulator_view()
