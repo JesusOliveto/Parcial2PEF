@@ -58,6 +58,8 @@ ASCII_DICE = {
 
 
 def _ensure_state() -> None:
+	"""Inicializa las claves necesarias dentro de ``st.session_state``."""
+
 	st.session_state.setdefault("vista", "juego")
 	st.session_state.setdefault("scores", [0, 0, 0, 0])
 	st.session_state.setdefault("round", 0)
@@ -66,6 +68,8 @@ def _ensure_state() -> None:
 
 
 def _safe_rerun() -> None:
+	"""Intenta relanzar la app usando la API disponible (estable o experimental)."""
+
 	rerun_fn: Optional[Callable[[], None]] = getattr(st, "rerun", None)
 	if rerun_fn is None:
 		rerun_fn = getattr(st, "experimental_rerun", None)
@@ -74,11 +78,15 @@ def _safe_rerun() -> None:
 
 
 def _dice_art(face: int) -> str:
+	"""Devuelve la representación ASCII de un dado para la cara indicada."""
+
 	caras = ASCII_DICE[face]
 	return "```\n" + "\n".join(caras) + "\n```"
 
 
 def _animate_roll(placeholders: Iterable[st.delta_generator.DeltaGenerator], final_faces: List[int]) -> None:
+	"""Muestra una animación de tirada antes de fijar los valores definitivos."""
+
 	for _ in range(8):
 		for idx, placeholder in enumerate(placeholders):
 			placeholder.markdown(_dice_art(random.randint(1, 6)))
@@ -88,6 +96,8 @@ def _animate_roll(placeholders: Iterable[st.delta_generator.DeltaGenerator], fin
 
 
 def _reset_game() -> None:
+	"""Restablece los contadores y últimas caras mostradas."""
+
 	st.session_state["scores"] = [0, 0, 0, 0]
 	st.session_state["round"] = 0
 	st.session_state["history"] = []
@@ -95,6 +105,8 @@ def _reset_game() -> None:
 
 
 def _render_scoreboard() -> None:
+	"""Presenta una tabla con el puntaje acumulado por jugador."""
+
 	score_data = [
 		{"Jugador": idx + 1, "Puntos": st.session_state["scores"][idx]}
 		for idx in range(4)
@@ -104,6 +116,8 @@ def _render_scoreboard() -> None:
 
 
 def _render_history() -> None:
+	"""Muestra el historial de rondas jugadas o un aviso si aún no hay datos."""
+
 	if not st.session_state["history"]:
 		st.info("Aún no hay rondas jugadas.")
 		return
@@ -113,6 +127,8 @@ def _render_history() -> None:
 
 
 def _render_game_view() -> None:
+	"""Renderiza la vista principal del juego interactivo de dados."""
+
 	st.title("Juego de Dados Multijugador")
 	st.caption("Cuatro jugadores se turnan lanzando dados con animación ASCII.")
 
@@ -155,6 +171,8 @@ def _render_game_view() -> None:
 
 
 def _formatear_probabilidades(jugador: PlayerStats) -> list[dict[str, float]]:
+	"""Transforma las probabilidades en una estructura tabular para Streamlit."""
+
 	distribucion = jugador.probability_distribution()
 	return [
 		{
@@ -167,6 +185,8 @@ def _formatear_probabilidades(jugador: PlayerStats) -> list[dict[str, float]]:
 
 
 def _mostrar_resultados(stats: GameStatistics) -> None:
+	"""Despliega las estadísticas producidas por la simulación masiva."""
+
 	st.subheader("Resumen de la simulación masiva")
 	st.metric("Rondas totales", stats.total_rounds)
 	st.metric(
@@ -183,6 +203,8 @@ def _mostrar_resultados(stats: GameStatistics) -> None:
 
 
 def _render_simulator_view() -> None:
+	"""Construye la vista dedicada al simulador vectorizado."""
+
 	st.title("Simulador en Batches (versión refactorizada)")
 	st.markdown(
 		"""
@@ -218,6 +240,8 @@ def _render_simulator_view() -> None:
 
 
 def main() -> None:
+	"""Punto de entrada de Streamlit que alterna entre juego y simulador."""
+
 	_ensure_state()
 	st.sidebar.title("Panel de control")
 	st.sidebar.markdown("Selecciona qué vista quieres usar.")

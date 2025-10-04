@@ -26,12 +26,34 @@ FACES = np.arange(1, 7)
 
 @dataclass
 class PlayerStats:
+	"""Representa las estadísticas agregadas de un jugador."""
+
 	player_id: int
 	total_points: int
 	frequencies: Dict[int, int]
 	most_common_value: int
 
+	@classmethod
+	def from_arrays(
+		cls,
+		player_id: int,
+		frequency_row: np.ndarray,
+		total_points: int,
+	) -> "PlayerStats":
+		"""Refactorización (Extract Factory Method): crea instancias coherentes desde arreglos numpy."""
+
+		freq_dict = {int(face): int(count) for face, count in zip(FACES, frequency_row)}
+		most_common_value = int(np.argmax(frequency_row) + 1)
+		return cls(
+			player_id=player_id,
+			total_points=int(total_points),
+			frequencies=freq_dict,
+			most_common_value=most_common_value,
+		)
+
 	def probability_distribution(self) -> Dict[int, float]:
+		"""Calcula la distribución de probabilidad empírica para el jugador."""
+
 		total_rolls = sum(self.frequencies.values())
 		if total_rolls == 0:
 			return {face: 0.0 for face in range(1, 7)}
@@ -43,11 +65,15 @@ class PlayerStats:
 
 @dataclass
 class GameStatistics:
+	"""Agrupa el resultado completo de una simulación."""
+
 	total_rounds: int
 	players: List[PlayerStats]
 	winner: PlayerStats
 
 	def to_dict(self) -> Dict[str, object]:
+		"""Serializa la estadística del juego a un diccionario estándar."""
+
 		return {
 			"total_rounds": self.total_rounds,
 			"players": [
@@ -67,6 +93,19 @@ class GameStatistics:
 
 
 def _validate_inputs(num_players: int, num_rounds: int, batch_size: int) -> None:
+	"""Valida los parámetros de entrada de la simulación.
+
+	Refactorización: Introduce Parameter Validation.
+
+	Args:
+		num_players: Número de jugadores a simular (1-4).
+		num_rounds: Cantidad total de rondas por jugador.
+		batch_size: Tamaño de lote para la simulación.
+
+	Raises:
+		ValueError: Si algún parámetro queda fuera de los límites aceptados.
+	"""
+
 	if not 1 <= num_players <= 4:
 		raise ValueError("El número de jugadores debe estar entre 1 y 4")
 	if num_rounds <= 0:
@@ -83,7 +122,19 @@ def simulate_dice_game(
 	batch_size: int = 100_000,
 	seed: int | None = None,
 ) -> GameStatistics:
-	"""Simula un juego de dados vectorizado usando lotes."""
+	"""Simula un juego de dados vectorizado usando lotes.
+
+	Refactorización: Introduce Batch Processing + Vectorization.
+
+	Args:
+		num_players: Número de jugadores a simular.
+		num_rounds: Cantidad de rondas que ejecutará cada jugador.
+		batch_size: Tamaño máximo del bloque procesado en cada iteración.
+		seed: Semilla opcional para reproducibilidad.
+
+	Returns:
+		Instancia `GameStatistics` con los resultados consolidados.
+	"""
 
 	_validate_inputs(num_players, num_rounds, batch_size)
 
@@ -96,26 +147,33 @@ def simulate_dice_game(
 		current_batch = min(batch_size, rounds_remaining)
 		rolls = rng.integers(1, 7, size=(current_batch, num_players), endpoint=False)
 		totals += rolls.sum(axis=0)
-		for player_idx in range(num_players):
-			counts = np.bincount(rolls[:, player_idx], minlength=7)[1:]
-			frequencies[player_idx] += counts
+		batch_frequencies = (rolls[..., None] == FACES).sum(axis=0)
+		frequencies += batch_frequencies  # Refactorización: Replace Loop with Vectorized Operation.
 		rounds_remaining -= current_batch
 
-	player_stats: List[PlayerStats] = []
-	for player_idx in range(num_players):
-		freq_dict = {int(face): int(count) for face, count in zip(FACES, frequencies[player_idx])}
-		most_common_value = int(np.argmax(frequencies[player_idx]) + 1)
-		player_stats.append(
-			PlayerStats(
-				player_id=player_idx + 1,
-				total_points=int(totals[player_idx]),
-				frequencies=freq_dict,
-				most_common_value=most_common_value,
-			)
-		)
+	player_stats = _build_player_stats(totals, frequencies)
 
 	winner = max(player_stats, key=lambda p: p.total_points)
 	return GameStatistics(total_rounds=num_rounds, players=player_stats, winner=winner)
+
+
+def _build_player_stats(totals: np.ndarray, frequencies: np.ndarray) -> List[PlayerStats]:
+	"""Convierte datos agregados en instancias ``PlayerStats``.
+
+	Refactorización: Extract Function + Encapsulate Collection.
+
+	Args:
+		totals: Vector con la suma de puntos por jugador.
+		frequencies: Matriz de frecuencias de caras por jugador.
+
+	Returns:
+		Lista ordenada de jugadores con sus estadísticas.
+	"""
+
+	return [
+		PlayerStats.from_arrays(player_idx + 1, frequencies[player_idx], totals[player_idx])
+		for player_idx in range(frequencies.shape[0])
+	]
 
 
 def simulate_probabilities(
@@ -125,6 +183,20 @@ def simulate_probabilities(
 	batch_size: int = 100_000,
 	seed: int | None = None,
 ) -> Dict[int, Dict[int, float]]:
+	"""Calcula la distribución de probabilidades observada para cada jugador.
+
+	Refactorización: Replace Data with Object al reutilizar los objetos `PlayerStats`.
+
+	Args:
+		num_players: Número de jugadores a simular.
+		num_rounds: Número de rondas en cada simulación.
+		batch_size: Tamaño del lote para ejecutar la simulación por bloques.
+		seed: Semilla opcional para obtener resultados reproducibles.
+
+	Returns:
+		Un diccionario keyed por `player_id` cuyo valor es otro diccionario `{cara: probabilidad}`.
+	"""
+
 	stats = simulate_dice_game(num_players, num_rounds, batch_size=batch_size, seed=seed)
 	return {player.player_id: player.probability_distribution() for player in stats.players}
 
@@ -137,11 +209,39 @@ def benchmark_simulator(
 	repeat: int = 3,
 	number: int = 1,
 ) -> List[float]:
+	"""Mide el desempeño de la simulación usando ``timeit``.
+
+	Refactorización: Preserve Whole Object al reutilizar `simulate_dice_game`.
+
+	Args:
+		num_players: Jugadores involucrados.
+		num_rounds: Rondas a simular por jugador.
+		batch_size: Tamaño de lote, compartido con la simulación principal.
+		repeat: Número de repeticiones de ``timeit``.
+		number: Ejecuciones de la simulación por repetición.
+
+	Returns:
+		Lista de duraciones (segundos) obtenidas en cada repetición.
+	"""
+
 	timer = timeit.Timer(lambda: simulate_dice_game(num_players, num_rounds, batch_size=batch_size))
 	return timer.repeat(repeat=repeat, number=number)
 
 
 def profile_with_cprofile(num_players: int, num_rounds: int, *, batch_size: int = 100_000) -> str:
+	"""Ejecuta ``cProfile`` sobre la simulación y devuelve un resumen.
+
+	Refactorización: Encapsulate External Interaction.
+
+	Args:
+		num_players: Número de jugadores a simular.
+		num_rounds: Cantidad de rondas totales.
+		batch_size: Tamaño del lote utilizado en la simulación.
+
+	Returns:
+		Cadena con las 15 funciones más costosas según tiempo acumulado.
+	"""
+
 	profiler = cProfile.Profile()
 	profiler.enable()
 	simulate_dice_game(num_players, num_rounds, batch_size=batch_size)
@@ -154,6 +254,8 @@ def profile_with_cprofile(num_players: int, num_rounds: int, *, batch_size: int 
 
 
 class DiceGameTests(unittest.TestCase):
+	"""Casos de prueba que aseguran la corrección estadística del simulador."""
+
 	def test_rolls_within_range(self) -> None:
 		stats = simulate_dice_game(4, 2_000, batch_size=500, seed=42)
 		for player in stats.players:
@@ -168,11 +270,15 @@ class DiceGameTests(unittest.TestCase):
 
 
 def run_tests() -> None:
+	"""Ejecuta la batería de pruebas unitarias incluida en el módulo."""
+
 	suite = unittest.defaultTestLoader.loadTestsFromTestCase(DiceGameTests)
 	unittest.TextTestRunner(verbosity=2).run(suite)
 
 
 def main() -> None:
+	"""Punto de entrada de línea de comandos para la versión refactorizada."""
+
 	parser = argparse.ArgumentParser(description="Simulador de dados refactorizado")
 	parser.add_argument("--players", type=int, default=4, help="Número de jugadores (1-4)")
 	parser.add_argument("--rounds", type=int, default=1_000_000, help="Número de rondas a simular")
