@@ -55,9 +55,11 @@ def _tirada_lenta() -> int:
 	"""Genera una tirada lenta a propósito."""
 
 	# Un pequeño sleep artificial para empeorar el rendimiento.
-	time.sleep(0.0001)
+	time.sleep(0.01)
 	return random.choice(VALORES_POSIBLES)
 
+
+#Funciones de simulación para cada jugador (código duplicado).
 
 def _simular_jugador1(rondas: int) -> List[int]:
 	resultados = []
