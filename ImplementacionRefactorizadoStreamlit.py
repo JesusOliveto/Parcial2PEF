@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import random
 import time
-from typing import Iterable, List
+from typing import Callable, Iterable, List, Optional
 
 import streamlit as st
 
@@ -65,6 +65,14 @@ def _ensure_state() -> None:
 	st.session_state.setdefault("last_faces", [1, 1, 1, 1])
 
 
+def _safe_rerun() -> None:
+	rerun_fn: Optional[Callable[[], None]] = getattr(st, "rerun", None)
+	if rerun_fn is None:
+		rerun_fn = getattr(st, "experimental_rerun", None)
+	if rerun_fn is not None:
+		rerun_fn()
+
+
 def _dice_art(face: int) -> str:
 	caras = ASCII_DICE[face]
 	return "```\n" + "\n".join(caras) + "\n```"
@@ -101,7 +109,7 @@ def _render_history() -> None:
 		return
 
 	st.subheader("Historial de rondas")
-	st.dataframe(st.session_state["history"], use_container_width=True)
+	st.dataframe(st.session_state["history"], width="stretch")
 
 
 def _render_game_view() -> None:
@@ -140,7 +148,7 @@ def _render_game_view() -> None:
 	with _reset_col:
 		if st.button("Reiniciar partida", type="secondary"):
 			_reset_game()
-			st.experimental_rerun()
+			_safe_rerun()
 
 	_render_scoreboard()
 	_render_history()
