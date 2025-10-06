@@ -76,3 +76,137 @@ python CodigoRefactorizado.py --run-tests
 - **line_profiler**: `kernprof -l -v CodigoRefactorizado.py`
 
 El script refactorizado ejecuta todo el cálculo por lotes en NumPy, por lo que es ideal para estudiar el ahorro respecto de la versión inicial y recoger mediciones objetivas.
+
+# Documentación con Sphinx
+
+Este proyecto incluye documentación profesional generada automáticamente usando **Sphinx** con el tema **Furo** para una experiencia de lectura óptima.
+
+## Generar la Documentación
+
+### Prerrequisitos
+Asegúrate de tener instaladas las dependencias de documentación:
+
+```powershell
+pip install sphinx furo sphinx-autodoc sphinx-napoleon
+```
+
+### Comandos para generar la documentación
+
+```powershell
+# Navegar al directorio de documentación
+cd docs\source
+
+# Generar archivos .rst automáticamente
+sphinx-apidoc -o . .. --force
+
+# Construir la documentación HTML
+sphinx-build -b html . _build/html
+
+# Abrir la documentación generada
+start _build/html/index.html
+```
+
+## Tema y Estilos
+
+### Tema Furo
+Hemos configurado **Furo** como tema principal por sus ventajas:
+- Diseño moderno y limpio
+- Navegación intuitiva con sidebar sticky
+- Modo oscuro/claro integrado
+- Excelente legibilidad en todos los dispositivos
+
+### Características de la documentación
+
+- **Documentación automática**: Extrae automáticamente docstrings de todos los módulos
+- **Búsqueda integrada**: Busca en toda la documentación instantáneamente
+- **Diseño responsive**: Se adapta a desktop, tablet y móvil
+- **Navegación jerárquica**: Estructura clara de módulos y funciones
+
+## Estructura de la Documentación
+
+```
+docs/source/
+├── conf.py              # Configuración de Sphinx
+├── index.rst            # Página principal
+├── modules.rst          # Índice de módulos automático
+├── codigo_refactorizado.rst # Documentación específica
+├── _static/
+│   └── custom.css       # Estilos personalizados
+└── _build/html/
+    ├── index.html       # Documentación generada
+    └── ...              # Archivos estáticos y navegación
+```
+
+## Secciones de la Documentación
+
+### 1. Página Principal
+- Descripción general del proyecto
+- Características principales
+- Guía de inicio rápido
+- Navegación estructurada
+
+### 2. Módulos Documentados
+- `CodigoRefactorizado.py`: Implementación optimizada con NumPy
+- `CodigoSinRefactorizar.py`: Versión original para comparación
+- `implementacionRefactorizadoStreamlit.py`: Interfaz web con Streamlit
+
+### 3. Documentación Automática
+Cada módulo incluye:
+- Descripciones de clases y sus métodos
+- Parámetros documentados con tipos y descripciones
+- Ejemplos de uso integrados
+- Herencia y relaciones entre clases
+
+## Personalización
+
+### Modificar estilos
+Edita `docs/source/_static/custom.css` para personalizar:
+
+```css
+/* Ejemplo de personalización */
+body {
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.sig {
+    background-color: #f8f9fa;
+    border-left: 4px solid #3498db;
+}
+```
+
+### Configuración avanzada
+Ajusta `docs/source/conf.py` para:
+- Cambiar el tema (`html_theme`)
+- Agregar extensiones Sphinx
+- Modificar opciones de autodoc
+- Personalizar metadatos del proyecto
+
+## Características Técnicas
+
+### Extensiones Habilitadas
+- `sphinx.ext.autodoc`: Documentación automática desde docstrings
+- `sphinx.ext.viewcode`: Enlaces al código fuente
+- `sphinx.ext.napoleon`: Soporte para docstrings Google-style
+- `sphinx.ext.napoleon`: Índices y búsqueda
+
+### Configuración de Autodoc
+```python
+autodoc_default_options = {
+    'members': True,
+    'undoc-members': True,
+    'show-inheritance': True,
+}
+```
+
+## Acceso a la Documentación
+
+Una vez generada, la documentación está disponible en:
+```
+file:./docs/source/_build/html/index.html
+```
+
+Puedes compartir la carpeta `_build/html/` completa o hospedarla en cualquier servidor web.
+
+---
+
+**Nota**: La documentación se regenera automáticamente cada vez que se modifica el código fuente, manteniéndose siempre actualizada con la implementación actual.

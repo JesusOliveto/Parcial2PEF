@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Código Refactorizado &#8212; Proyecto 7 - Simulacion de un Juego de Dados  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=4b87c4f6" />
+    <script src="_static/documentation_options.js?v=8a448e45"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Módulos" href="modules.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-CodigoRefactorizado">
+<span id="codigo-refactorizado"></span><h1>Código Refactorizado<a class="headerlink" href="#module-CodigoRefactorizado" title="Link to this heading">¶</a></h1>
+<p>Versión refactorizada y eficiente del simulador de dados.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="CodigoRefactorizado.DiceGameTests">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">CodigoRefactorizado.</span></span><span class="sig-name descname"><span class="pre">DiceGameTests</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CodigoRefactorizado.html#DiceGameTests"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CodigoRefactorizado.DiceGameTests" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TestCase</span></code></p>
+<p>Casos de prueba que aseguran la corrección estadística del simulador.</p>
+<p>Create an instance of the class that will use the named test
+method when executed. Raises a ValueError if the instance does
+not have a method with the specified name.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="CodigoRefactorizado.DiceGameTests.test_probability_sum_is_one">
+<span class="sig-name descname"><span class="pre">test_probability_sum_is_one</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/CodigoRefactorizado.html#DiceGameTests.test_probability_sum_is_one"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CodigoRefactorizado.DiceGameTests.test_probability_sum_is_one" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CodigoRefactorizado.DiceGameTests.test_rolls_within_range">
+<span class="sig-name descname"><span class="pre">test_rolls_within_range</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/CodigoRefactorizado.html#DiceGameTests.test_rolls_within_range"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CodigoRefactorizado.DiceGameTests.test_rolls_within_range" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="CodigoRefactorizado.GameStatistics">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">CodigoRefactorizado.</span></span><span class="sig-name descname"><span class="pre">GameStatistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">total_rounds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">players</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="index.html#CodigoRefactorizado.PlayerStats" title="CodigoRefactorizado.PlayerStats"><span class="pre">PlayerStats</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">winner</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="index.html#CodigoRefactorizado.PlayerStats" title="CodigoRefactorizado.PlayerStats"><span class="pre">PlayerStats</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CodigoRefactorizado.html#GameStatistics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CodigoRefactorizado.GameStatistics" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Agrupa el resultado completo de una simulación.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="CodigoRefactorizado.GameStatistics.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">total_rounds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">players</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="index.html#CodigoRefactorizado.PlayerStats" title="CodigoRefactorizado.PlayerStats"><span class="pre">PlayerStats</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">winner</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="index.html#CodigoRefactorizado.PlayerStats" title="CodigoRefactorizado.PlayerStats"><span class="pre">PlayerStats</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#CodigoRefactorizado.GameStatistics.__init__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="CodigoRefactorizado.GameStatistics.players">
+<span class="sig-name descname"><span class="pre">players</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="index.html#CodigoRefactorizado.PlayerStats" title="CodigoRefactorizado.PlayerStats"><span class="pre">PlayerStats</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#CodigoRefactorizado.GameStatistics.players" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CodigoRefactorizado.GameStatistics.to_dict">
+<span class="sig-name descname"><span class="pre">to_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">object</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/CodigoRefactorizado.html#GameStatistics.to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CodigoRefactorizado.GameStatistics.to_dict" title="Link to this definition">¶</a></dt>
+<dd><p>Serializa la estadística del juego a un diccionario estándar.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="CodigoRefactorizado.GameStatistics.total_rounds">
+<span class="sig-name descname"><span class="pre">total_rounds</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#CodigoRefactorizado.GameStatistics.total_rounds" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="CodigoRefactorizado.GameStatistics.winner">
+<span class="sig-name descname"><span class="pre">winner</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="index.html#CodigoRefactorizado.PlayerStats" title="CodigoRefactorizado.PlayerStats"><span class="pre">PlayerStats</span></a></em><a class="headerlink" href="#CodigoRefactorizado.GameStatistics.winner" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="CodigoRefactorizado.PlayerStats">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">CodigoRefactorizado.</span></span><span class="sig-name descname"><span class="pre">PlayerStats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">player_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_points</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frequencies</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">most_common_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CodigoRefactorizado.html#PlayerStats"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CodigoRefactorizado.PlayerStats" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Representa las estadísticas agregadas de un jugador.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="CodigoRefactorizado.PlayerStats.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">player_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_points</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frequencies</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">most_common_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#CodigoRefactorizado.PlayerStats.__init__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="CodigoRefactorizado.PlayerStats.frequencies">
+<span class="sig-name descname"><span class="pre">frequencies</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#CodigoRefactorizado.PlayerStats.frequencies" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CodigoRefactorizado.PlayerStats.from_arrays">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_arrays</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">player_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frequency_row</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_points</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="index.html#CodigoRefactorizado.PlayerStats" title="CodigoRefactorizado.PlayerStats"><span class="pre">PlayerStats</span></a></span></span><a class="reference internal" href="_modules/CodigoRefactorizado.html#PlayerStats.from_arrays"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CodigoRefactorizado.PlayerStats.from_arrays" title="Link to this definition">¶</a></dt>
+<dd><p>Refactorización (Extract Factory Method): crea instancias coherentes desde arreglos numpy.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="CodigoRefactorizado.PlayerStats.most_common_value">
+<span class="sig-name descname"><span class="pre">most_common_value</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#CodigoRefactorizado.PlayerStats.most_common_value" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="CodigoRefactorizado.PlayerStats.player_id">
+<span class="sig-name descname"><span class="pre">player_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#CodigoRefactorizado.PlayerStats.player_id" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CodigoRefactorizado.PlayerStats.probability_distribution">
+<span class="sig-name descname"><span class="pre">probability_distribution</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/CodigoRefactorizado.html#PlayerStats.probability_distribution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CodigoRefactorizado.PlayerStats.probability_distribution" title="Link to this definition">¶</a></dt>
+<dd><p>Calcula la distribución de probabilidad empírica para el jugador.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="CodigoRefactorizado.PlayerStats.total_points">
+<span class="sig-name descname"><span class="pre">total_points</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#CodigoRefactorizado.PlayerStats.total_points" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CodigoRefactorizado.benchmark_simulator">
+<span class="sig-prename descclassname"><span class="pre">CodigoRefactorizado.</span></span><span class="sig-name descname"><span class="pre">benchmark_simulator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_players</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_rounds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repeat</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/CodigoRefactorizado.html#benchmark_simulator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CodigoRefactorizado.benchmark_simulator" title="Link to this definition">¶</a></dt>
+<dd><p>Mide el desempeño de la simulación usando <code class="docutils literal notranslate"><span class="pre">timeit</span></code>.</p>
+<p>Refactorización: Preserve Whole Object al reutilizar <cite>simulate_dice_game</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_players</strong> – Jugadores involucrados.</p></li>
+<li><p><strong>num_rounds</strong> – Rondas a simular por jugador.</p></li>
+<li><p><strong>batch_size</strong> – Tamaño de lote, compartido con la simulación principal.</p></li>
+<li><p><strong>repeat</strong> – Número de repeticiones de <code class="docutils literal notranslate"><span class="pre">timeit</span></code>.</p></li>
+<li><p><strong>number</strong> – Ejecuciones de la simulación por repetición.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Lista de duraciones (segundos) obtenidas en cada repetición.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CodigoRefactorizado.main">
+<span class="sig-prename descclassname"><span class="pre">CodigoRefactorizado.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/CodigoRefactorizado.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CodigoRefactorizado.main" title="Link to this definition">¶</a></dt>
+<dd><p>Punto de entrada de línea de comandos para la versión refactorizada.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CodigoRefactorizado.profile">
+<span class="sig-prename descclassname"><span class="pre">CodigoRefactorizado.</span></span><span class="sig-name descname"><span class="pre">profile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CodigoRefactorizado.html#profile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CodigoRefactorizado.profile" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CodigoRefactorizado.profile_with_cprofile">
+<span class="sig-prename descclassname"><span class="pre">CodigoRefactorizado.</span></span><span class="sig-name descname"><span class="pre">profile_with_cprofile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_players</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_rounds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100000</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/CodigoRefactorizado.html#profile_with_cprofile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CodigoRefactorizado.profile_with_cprofile" title="Link to this definition">¶</a></dt>
+<dd><p>Ejecuta <code class="docutils literal notranslate"><span class="pre">cProfile</span></code> sobre la simulación y devuelve un resumen.</p>
+<p>Refactorización: Encapsulate External Interaction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_players</strong> – Número de jugadores a simular.</p></li>
+<li><p><strong>num_rounds</strong> – Cantidad de rondas totales.</p></li>
+<li><p><strong>batch_size</strong> – Tamaño del lote utilizado en la simulación.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Cadena con las 15 funciones más costosas según tiempo acumulado.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CodigoRefactorizado.run_tests">
+<span class="sig-prename descclassname"><span class="pre">CodigoRefactorizado.</span></span><span class="sig-name descname"><span class="pre">run_tests</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/CodigoRefactorizado.html#run_tests"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CodigoRefactorizado.run_tests" title="Link to this definition">¶</a></dt>
+<dd><p>Ejecuta la batería de pruebas unitarias incluida en el módulo.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CodigoRefactorizado.simulate_dice_game">
+<span class="sig-prename descclassname"><span class="pre">CodigoRefactorizado.</span></span><span class="sig-name descname"><span class="pre">simulate_dice_game</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_players</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_rounds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="index.html#CodigoRefactorizado.GameStatistics" title="CodigoRefactorizado.GameStatistics"><span class="pre">GameStatistics</span></a></span></span><a class="reference internal" href="_modules/CodigoRefactorizado.html#simulate_dice_game"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CodigoRefactorizado.simulate_dice_game" title="Link to this definition">¶</a></dt>
+<dd><p>Simula un juego de dados vectorizado usando lotes.</p>
+<p>Refactorización: Introduce Batch Processing + Vectorization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_players</strong> – Número de jugadores a simular.</p></li>
+<li><p><strong>num_rounds</strong> – Cantidad de rondas que ejecutará cada jugador.</p></li>
+<li><p><strong>batch_size</strong> – Tamaño máximo del bloque procesado en cada iteración.</p></li>
+<li><p><strong>seed</strong> – Semilla opcional para reproducibilidad.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Instancia <cite>GameStatistics</cite> con los resultados consolidados.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CodigoRefactorizado.simulate_probabilities">
+<span class="sig-prename descclassname"><span class="pre">CodigoRefactorizado.</span></span><span class="sig-name descname"><span class="pre">simulate_probabilities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_players</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_rounds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/CodigoRefactorizado.html#simulate_probabilities"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CodigoRefactorizado.simulate_probabilities" title="Link to this definition">¶</a></dt>
+<dd><p>Calcula la distribución de probabilidades observada para cada jugador.</p>
+<p>Refactorización: Replace Data with Object al reutilizar los objetos <cite>PlayerStats</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_players</strong> – Número de jugadores a simular.</p></li>
+<li><p><strong>num_rounds</strong> – Número de rondas en cada simulación.</p></li>
+<li><p><strong>batch_size</strong> – Tamaño del lote para ejecutar la simulación por bloques.</p></li>
+<li><p><strong>seed</strong> – Semilla opcional para obtener resultados reproducibles.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>probabilidad}`.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Un diccionario keyed por <cite>player_id</cite> cuyo valor es otro diccionario <a href="#id1"><span class="problematic" id="id2">`</span></a>{cara</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Proyecto 7 - Simulacion de un Juego de Dados</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Documentación:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Módulos</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Código Refactorizado</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Código Refactorizado</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#CodigoRefactorizado.DiceGameTests"><code class="docutils literal notranslate"><span class="pre">DiceGameTests</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#CodigoRefactorizado.GameStatistics"><code class="docutils literal notranslate"><span class="pre">GameStatistics</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#CodigoRefactorizado.PlayerStats"><code class="docutils literal notranslate"><span class="pre">PlayerStats</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#CodigoRefactorizado.benchmark_simulator"><code class="docutils literal notranslate"><span class="pre">benchmark_simulator()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#CodigoRefactorizado.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#CodigoRefactorizado.profile"><code class="docutils literal notranslate"><span class="pre">profile()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#CodigoRefactorizado.profile_with_cprofile"><code class="docutils literal notranslate"><span class="pre">profile_with_cprofile()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#CodigoRefactorizado.run_tests"><code class="docutils literal notranslate"><span class="pre">run_tests()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#CodigoRefactorizado.simulate_dice_game"><code class="docutils literal notranslate"><span class="pre">simulate_dice_game()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#CodigoRefactorizado.simulate_probabilities"><code class="docutils literal notranslate"><span class="pre">simulate_probabilities()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">Módulos</a><ul>
+      <li>Previous: <a href="modules.html" title="previous chapter">Módulos</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, Olavarria-Lopez.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="_sources/codigo_refactorizado.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
