@@ -130,7 +130,6 @@ def _render_game_view() -> None:
 	"""Renderiza la vista principal del juego interactivo de dados."""
 
 	st.title("Juego de Dados Multijugador")
-	st.caption("Cuatro jugadores se turnan lanzando dados con animación ASCII.")
 
 	cols = st.columns(4)
 	placeholders = []
@@ -205,7 +204,7 @@ def _mostrar_resultados(stats: GameStatistics) -> None:
 def _render_simulator_view() -> None:
 	"""Construye la vista dedicada al simulador vectorizado."""
 
-	st.title("Simulador en Batches (versión refactorizada)")
+	st.title("Simulador en Batches")
 	st.markdown(
 		"""
 		Configura los parámetros y ejecuta la simulación vectorizada para comparar con el juego manual.
