@@ -1,6 +1,6 @@
 """Versión sin refactorizar del simulador de dados.
 
-Esta versión está plagada de malos olores deliberados para el parcial:
+Esta versión cuenta con bad smells evidentes como:
 - Código duplicado en exceso.
 - Uso de variables globales y estado compartido.
 - Falta de separación de responsabilidades.
