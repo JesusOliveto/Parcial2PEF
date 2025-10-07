@@ -1,3 +1,166 @@
+---
+
+Explicación práctica de cada punto
+==================================
+
+1. **Simulador de tiradas de dados para 1 a 4 jugadores**
+    - En la versión inicial, se crean funciones duplicadas para cada jugador:
+       ```python
+       def _simular_jugador1(rondas):
+             resultados = []
+             for _ in range(rondas):
+                   resultados.append(_tirada_lenta())
+             return resultados
+       # ...igual para jugador2, jugador3, jugador4
+       ```
+    - En la versión refactorizada, se usa NumPy para simular todos los jugadores en bloque:
+       ```python
+       rolls = rng.integers(1, 7, size=(current_batch, num_players), endpoint=False)
+       ```
+
+2. **Guardar estadísticas: número de tiradas, valores más frecuentes, ganador**
+    - Se usan diccionarios y `Counter` para contar frecuencias:
+       ```python
+       contador = Counter(tiradas)
+       mas_frecuente = max(contador.items(), key=lambda x: (x[1], x[0]))[0]
+       ```
+    - En la versión refactorizada, se encapsula en dataclasses:
+       ```python
+       @dataclass
+       class PlayerStats:
+             player_id: int
+             total_points: int
+             frequencies: Dict[int, int]
+             most_common_value: int
+       ```
+
+3. **Versión inicial con funciones repetidas y mala estructura → refactorizar**
+    - El código inicial tiene funciones casi idénticas y estado global:
+       ```python
+       GLOBAL_RESULTS = {}
+       def _reiniciar_global(players):
+             # ...
+       ```
+    - El refactor elimina duplicaciones y usa funciones puras y objetos:
+       ```python
+       def _build_player_stats(...):
+             # ...
+       ```
+
+4. **Usar batching para simular millones de tiradas en bloques**
+    - Inicialmente, se simulan lotes con bucles manuales:
+       ```python
+       while rondas_pendientes > 0:
+             resultado = simular_juego_sin_refactor(players, tamanio)
+             # ...
+       ```
+    - Refactorizado con NumPy:
+       ```python
+       while rounds_remaining > 0:
+             rolls = rng.integers(1, 7, size=(current_batch, num_players), endpoint=False)
+             # ...
+       ```
+
+5. **Medir rendimiento con timeit y cProfile**
+    - Se usa `timeit` para medir tiempos:
+       ```python
+       temporizador = timeit.Timer(lambda: simular_juego_sin_refactor(players, rondas))
+       resultados = temporizador.repeat(...)
+       ```
+    - Se usa `cProfile` para analizar funciones más lentas:
+       ```python
+       profiler = cProfile.Profile()
+       profiler.enable()
+       simular_juego_sin_refactor(...)
+       profiler.disable()
+       ```
+
+6. **Usar line_profiler para ver qué partes del código se ejecutan más**
+    - Se marca funciones con `@profile` y se ejecuta con `kernprof`:
+       ```python
+       @profile
+       def simular_juego_sin_refactor(...):
+             # ...
+       ```
+
+7. **Implementar tests que verifiquen: tiradas entre 1 y 6, suma de probabilidades ≈ esperada**
+    - En ambos módulos, se usan pruebas unitarias:
+       ```python
+       class TestSimuladorSinRefactor(unittest.TestCase):
+             def test_tirada_en_rango(self):
+                   self.assertGreaterEqual(valor, 1)
+                   self.assertLessEqual(valor, 6)
+             def test_probabilidades_sumadas(self):
+                   self.assertAlmostEqual(sum(probabilidades), 1.0, delta=0.05)
+       ```
+       ```python
+       class DiceGameTests(unittest.TestCase):
+             def test_rolls_within_range(self):
+                   # ...
+             def test_probability_sum_is_one(self):
+                   # ...
+       ```
+
+8. **Interfaz interactiva y visualización**
+    - Se usa Streamlit para mostrar el juego y el simulador batch:
+       ```python
+       import streamlit as st
+       def _render_game_view():
+             st.title("Juego de Dados Multijugador")
+             # ...
+       def _render_simulator_view():
+             st.title("Simulador en Batches")
+             # ...
+       ```
+---
+
+Resumen de técnicas y librerías utilizadas
+==========================================
+
+1. **Simulador de tiradas de dados para 1 a 4 jugadores**
+   - Técnicas: Algoritmos iterativos (versión inicial), vectorización y procesamiento por lotes (refactorizado).
+   - Librerías: `random` (sin refactorizar), `numpy` (refactorizado), manejo de listas y diccionarios.
+
+2. **Guardar estadísticas: número de tiradas, valores más frecuentes, ganador**
+   - Técnicas: Uso de `collections.Counter`, agregación de resultados, encapsulamiento en dataclasses (`PlayerStats`, `GameStatistics`).
+   - Librerías: `collections`, `dataclasses` (refactorizado), estructuras estándar de Python.
+
+3. **Versión inicial con funciones repetidas y mala estructura → refactorizar**
+   - Técnicas: Duplicación de funciones, estado global, refactorización hacia funciones puras y objetos.
+   - Librerías: Python estándar, `dataclasses`, `numpy`.
+
+4. **Usar batching para simular millones de tiradas en bloques**
+   - Técnicas: Procesamiento por lotes con bucles y luego con arrays NumPy.
+   - Librerías: `numpy`, slicing y operaciones vectorizadas.
+
+5. **Medir rendimiento con timeit y cProfile**
+   - Técnicas: Benchmarking con `timeit.Timer`, profiling con `cProfile.Profile` y `pstats.Stats`.
+   - Librerías: `timeit`, `cProfile`, `pstats`.
+
+6. **Usar line_profiler para ver qué partes del código se ejecutan más**
+   - Técnicas: Decorador `@profile` para marcar funciones, análisis con `kernprof` y visualización de tiempos por línea.
+   - Librerías: `line_profiler`, `kernprof`.
+
+7. **Implementar tests que verifiquen: tiradas entre 1 y 6, suma de probabilidades ≈ esperada**
+   - Técnicas: Pruebas unitarias con `unittest`, aserciones sobre rangos y sumas de probabilidades.
+   - Librerías: `unittest`, `random`, `numpy`.
+
+8. **Interfaz interactiva y visualización**
+   - Técnicas: Animación ASCII, visualización de resultados, interacción por lotes y manual.
+   - Librerías: `streamlit`, helpers de visualización, integración con módulos refactorizados.
+Análisis de profiling
+=====================
+
+El bloque siguiente mantiene el detalle crudo de las ejecuciones (salidas de `kernprof`, `cProfile` y `timeit`). Las conclusiones resumidas permiten consultarlas sin recorrer todas las trazas.
+
+## Resumen ejecutivo
+
+- La versión sin refactorizar tarda ~84 s en 1 000 rondas y está dominada por `time.sleep`.
+- La versión refactorizada ejecuta 1 000 000 de rondas en ~0.2 s gracias a NumPy vectorizado.
+- Las mejoras clave provienen de eliminar duplicaciones, estado global y retardos artificiales.
+
+---
+
 CodigoSinRefactorizar: 
 
 PS C:\Users\Gsu\Documents\Parcial2PEF> py -m  kernprof -l -v .\CodigoSinRefactorizar.py
@@ -59,7 +222,44 @@ Line #      Hits         Time  Per Hit   % Time  Line Contents
 
 
 
+PS C:\Users\Gsu\Documents\Parcial2PEF> python .\CodigoSinRefactorizar.py --profile
+         37461 function calls (37447 primitive calls) in 41.805 seconds
+
+   Ordered by: cumulative time
+   List reduced from 36 to 10 due to restriction <10>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000   41.805   41.805 C:\Users\Gsu\Documents\Parcial2PEF\CodigoSinRefactorizar.py:147(simular_juego_sin_refactor)
+     4000    0.033    0.000   41.790    0.010 C:\Users\Gsu\Documents\Parcial2PEF\CodigoSinRefactorizar.py:58(_tirada_lenta)
+     4000   41.701    0.010   41.701    0.010 {built-in method time.sleep}
+        1    0.002    0.002   10.461   10.461 C:\Users\Gsu\Documents\Parcial2PEF\CodigoSinRefactorizar.py:77(_simular_jugador2)
+        1    0.003    0.003   10.455   10.455 C:\Users\Gsu\Documents\Parcial2PEF\CodigoSinRefactorizar.py:85(_simular_jugador3)
+        1    0.003    0.003   10.451   10.451 C:\Users\Gsu\Documents\Parcial2PEF\CodigoSinRefactorizar.py:93(_simular_jugador4)
+        1    0.002    0.002   10.437   10.437 C:\Users\Gsu\Documents\Parcial2PEF\CodigoSinRefactorizar.py:69(_simular_jugador1)
+     4000    0.024    0.000    0.056    0.000 C:\Python313\Lib\random.py:345(choice)
+     4000    0.016    0.000    0.026    0.000 C:\Python313\Lib\random.py:245(_randbelow_with_getrandbits)
+     8004    0.007    0.000    0.007    0.000 {built-in method builtins.len}
+
+
+
+Simulación completa:
+{'jugadores': [{'jugador': 'player_1', 'tiradas': 1000, 'frecuencias': {1: 178, 2: 158, 3: 166, 4: 160, 5: 161, 6: 177}, 'total': 3499, 'valor_mas_frecuente': 1, 'mensaje': 'Jugador player_1 obtuvo 3499 puntos'}, {'jugador': 'player_2', 'tiradas': 1000, 'frecuencias': {1: 158, 2: 175, 3: 158, 4: 179, 5: 156, 6: 174}, 'total': 3522, 'valor_mas_frecuente': 4, 'mensaje': 'Jugador player_2 obtuvo 3522 puntos'}, {'jugador': 'player_3', 'tiradas': 1000, 'frecuencias': {1: 168, 2: 174, 3: 162, 4: 170, 5: 169, 6: 157}, 'total': 3469, 'valor_mas_frecuente': 2, 'mensaje': 'Jugador player_3 obtuvo 3469 puntos'}, {'jugador': 'player_4', 'tiradas': 1000, 'frecuencias': {1: 155, 2: 182, 3: 168, 4: 172, 5: 169, 6: 154}, 'total': 3480, 'valor_mas_frecuente': 2, 'mensaje': 'Jugador player_4 obtuvo 3480 puntos'}], 'total_rondas': 1000, 'ganador': {'jugador': 'player_2', 'total': 3522}}
+Simulación en lotes (ineficiente):
+{'jugadores': [{'jugador': 'player_1', 'tiradas': 1000, 'frecuencias': {1: 176, 2: 158, 3: 162, 4: 171, 5: 155, 6: 178}, 'total': 3505, 'valor_mas_frecuente': 6, 'mensaje': 'Jugador player_1 obtuvo 3505 puntos'}, {'jugador': 'player_2', 'tiradas': 1000, 'frecuencias': {1: 176, 2: 152, 3: 161, 4: 160, 5: 160, 6: 191}, 'total': 3549, 'valor_mas_frecuente': 6, 'mensaje': 'Jugador player_2 obtuvo 3549 puntos'}, {'jugador': 'player_3', 'tiradas': 1000, 'frecuencias': {1: 161, 2: 186, 3: 160, 4: 168, 5: 180, 6: 145}, 'total': 3455, 'valor_mas_frecuente': 2, 'mensaje': 'Jugador player_3 obtuvo 3455 puntos'}, {'jugador': 'player_4', 'tiradas': 1000, 'frecuencias': {1: 158, 2: 170, 3: 175, 4: 134, 5: 178, 6: 185}, 'total': 3559, 'valor_mas_frecuente': 6, 'mensaje': 'Jugador player_4 obtuvo 3559 puntos'}], 'total_rondas': 1000, 'ganador': {'jugador': 'player_4', 'total': 3559}}
+
+
+
+PS C:\Users\Gsu\Documents\Parcial2PEF> python .\CodigoSinRefactorizar.py --timeit
+Resultados timeit: [41.95559819997288, 41.75493540009484, 41.63091380009428]
+Simulación completa:
+{'jugadores': [{'jugador': 'player_1', 'tiradas': 1000, 'frecuencias': {1: 157, 2: 172, 3: 157, 4: 189, 5: 172, 6: 153}, 'total': 3506, 'valor_mas_frecuente': 4, 'mensaje': 'Jugador player_1 obtuvo 3506 puntos'}, {'jugador': 'player_2', 'tiradas': 1000, 'frecuencias': {1: 190, 2: 164, 3: 155, 4: 164, 5: 165, 6: 162}, 'total': 3436, 'valor_mas_frecuente': 1, 'mensaje': 'Jugador player_2 obtuvo 3436 puntos'}, {'jugador': 'player_3', 'tiradas': 1000, 'frecuencias': {1: 151, 2: 155, 3: 176, 4: 203, 5: 152, 6: 163}, 'total': 3539, 'valor_mas_frecuente': 4, 'mensaje': 'Jugador player_3 obtuvo 3539 puntos'}, {'jugador': 'player_4', 'tiradas': 1000, 'frecuencias': {1: 176, 2: 173, 3: 155, 4: 176, 5: 171, 6: 149}, 'total': 3440, 'valor_mas_frecuente': 4, 'mensaje': 'Jugador player_4 obtuvo 3440 puntos'}], 'total_rondas': 1000, 'ganador': {'jugador': 'player_3', 'total': 3539}}
+Simulación en lotes (ineficiente):
+{'jugadores': [{'jugador': 'player_1', 'tiradas': 1000, 'frecuencias': {1: 167, 2: 171, 3: 169, 4: 186, 5: 155, 6: 152}, 'total': 3447, 'valor_mas_frecuente': 4, 'mensaje': 'Jugador player_1 obtuvo 3447 puntos'}, {'jugador': 'player_2', 'tiradas': 1000, 'frecuencias': {1: 174, 2: 162, 3: 176, 4: 167, 5: 167, 6: 154}, 'total': 3453, 'valor_mas_frecuente': 3, 'mensaje': 'Jugador player_2 obtuvo 3453 puntos'}, {'jugador': 'player_3', 'tiradas': 1000, 'frecuencias': {1: 152, 2: 158, 3: 196, 4: 166, 5: 170, 6: 158}, 'total': 3518, 'valor_mas_frecuente': 3, 'mensaje': 'Jugador player_3 obtuvo 3518 puntos'}, {'jugador': 'player_4', 'tiradas': 1000, 'frecuencias': {1: 165, 2: 180, 3: 160, 4: 163, 5: 171, 6: 161}, 'total': 3478, 'valor_mas_frecuente': 2, 'mensaje': 'Jugador player_4 obtuvo 3478 puntos'}], 'total_rondas': 1000, 'ganador': {'jugador': 'player_3', 'total': 3518}}
+-------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
    CodigoRefactorizado:
+---------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
 
    PS C:\Users\Gsu\Documents\Parcial2PEF> py -m  kernprof -l -v .\CodigoRefactorizado.py
 {'total_rounds': 1000000, 'players': [{'player_id': 1, 'total_points': 3501932, 'frequencies': {1: 166617, 2: 166379, 3: 166771, 4: 165988, 5: 167178, 6: 167067}, 'most_common_value': 5}, {'player_id': 2, 'total_points': 3501552, 'frequencies': {1: 166346, 2: 166485, 3: 167211, 4: 166321, 5: 166503, 6: 167134}, 'most_common_value': 3}, {'player_id': 3, 'total_points': 3497923, 'frequencies': {1: 166959, 2: 167017, 3: 166373, 4: 166580, 5: 166935, 6: 166136}, 'most_common_value': 2}, {'player_id': 4, 'total_points': 3495899, 'frequencies': {1: 166830, 2: 167472, 3: 167010, 4: 166498, 5: 166037, 6: 166153}, 'most_common_value': 2}], 'winner': {'player_id': 1, 'total_points': 3501932}}
@@ -115,11 +315,58 @@ Line #      Hits         Time  Per Hit   % Time  Line Contents
    157         1         12.2     12.2      0.0         return GameStatistics(total_rounds=num_rounds, players=player_stats, winner=winner)
 
 
+PS C:\Users\Gsu\Documents\Parcial2PEF> python CodigoRefactorizado.py --profile         
+         6507 function calls (6335 primitive calls) in 0.172 seconds
+
+   Ordered by: cumulative time
+   List reduced from 309 to 15 due to restriction <15>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.100    0.100    0.172    0.172 C:\Users\Gsu\Documents\Parcial2PEF\CodigoRefactorizado.py:117(simulate_dice_game)
+       30    0.044    0.001    0.044    0.001 {method 'reduce' of 'numpy.ufunc' objects}
+       20    0.000    0.000    0.044    0.002 {method 'sum' of 'numpy.ndarray' objects}
+       20    0.000    0.000    0.044    0.002 C:\Users\Gsu\AppData\Roaming\Python\Python313\site-packages\numpy\_core\_methods.py:49(_sum)
+        1    0.000    0.000    0.028    0.028 C:\Users\Gsu\AppData\Roaming\Python\Python313\site-packages\numpy\__init__.py:720(__getattr__)
+     23/1    0.000    0.000    0.028    0.028 <frozen importlib._bootstrap>:1349(_find_and_load)
+     23/1    0.000    0.000    0.028    0.028 <frozen importlib._bootstrap>:1304(_find_and_load_unlocked)
+     23/1    0.000    0.000    0.027    0.027 <frozen importlib._bootstrap>:911(_load_unlocked)
+      9/1    0.000    0.000    0.027    0.027 <frozen importlib._bootstrap_external>:1020(exec_module)
+     59/2    0.000    0.000    0.026    0.013 <frozen importlib._bootstrap>:480(_call_with_frames_removed)
+      9/1    0.000    0.000    0.026    0.026 {built-in method builtins.exec}
+        1    0.000    0.000    0.026    0.026 C:\Users\Gsu\AppData\Roaming\Python\Python313\site-packages\numpy\random\__init__.py:1(<module>)
+      2/1    0.000    0.000    0.026    0.026 <frozen importlib._bootstrap>:1390(_handle_fromlist)
+        2    0.000    0.000    0.026    0.013 {built-in method builtins.__import__}
+     10/5    0.000    0.000    0.021    0.004 <frozen importlib._bootstrap_external>:1326(exec_module)
 
 
-   Mejoras observadas:
-    - Tiempo total reducido de ~84 segundos a ~0.2 segundos.
-    - Uso de procesamiento por lotes y operaciones vectorizadas con NumPy.
-    - Código más limpio y mantenible con funciones pequeñas y específicas.
-    - Validación de entradas y manejo de errores mejorados.
-    - Eliminación de efectos secundarios y crecimiento infinito de logs en memoria.
+
+{'total_rounds': 1000000, 'players': [{'player_id': 1, 'total_points': 3499718, 'frequencies': {1: 166886, 2: 166480, 3: 166698, 4: 166968, 5: 165902, 6: 167066}, 'most_common_value': 6}, {'player_id': 2, 'total_points': 3502025, 'frequencies': {1: 167250, 2: 166201, 3: 166274, 4: 165787, 5: 166525, 6: 167963}, 'most_common_value': 6}, {'player_id': 3, 'total_points': 3501521, 'frequencies': {1: 166256, 2: 166478, 3: 167086, 4: 166837, 5: 166355, 6: 166988}, 'most_common_value': 3}, {'player_id': 4, 'total_points': 3501293, 'frequencies': {1: 166210, 2: 166551, 3: 166599, 4: 167354, 5: 166948, 6: 166338}, 'most_common_value': 4}], 'winner': {'player_id': 2, 'total_points': 3502025}}
+
+
+
+
+
+
+
+
+PS C:\Users\Gsu\Documents\Parcial2PEF> python CodigoRefactorizado.py --timeit        
+[0.17821649997495115, 0.16603670013137162, 0.1589919999241829]
+{'total_rounds': 1000000, 'players': [{'player_id': 1, 'total_points': 3498211, 'frequencies': {1: 166670, 2: 166861, 3: 167247, 4: 166328, 5: 166598, 6: 166296}, 'most_common_value': 3}, {'player_id': 2, 'total_points': 3495735, 'frequencies': {1: 167560, 2: 166930, 3: 166496, 4: 166204, 5: 166849, 6: 165961}, 'most_common_value': 1}, {'player_id': 3, 'total_points': 3500769, 'frequencies': {1: 166736, 2: 165966, 3: 167023, 4: 166806, 5: 167006, 6: 166463}, 'most_common_value': 3}, {'player_id': 4, 'total_points': 3499602, 'frequencies': {1: 166704, 2: 166929, 3: 166492, 4: 166530, 5: 166626, 6: 166719}, 'most_common_value': 2}], 'winner': {'player_id': 3, 'total_points': 3500769}}
+
+
+
+
+
+
+
+
+
+----------------------------------------------------------------------------------------------------------
+
+   Mejoras observadas (detalle):
+    - **Rendimiento:** la simulación pasó de ~84 s para 1 000 rondas a ~0.2 s para 1 000 000 de rondas, lo que supone un throughput >400 000× más alto por tirada.
+    - **Cuellos de botella eliminados:** se retiró el `time.sleep(0.01)` y la duplicación `_simular_jugadorX`, sustituyéndolos por un único flujo vectorizado.
+    - **Procesamiento por lotes real:** se consolidan las tiradas en arreglos NumPy y se cuentan frecuencias sin reconstruir listas intermedias.
+    - **Gestión de estado:** desaparición de `GLOBAL_RESULTS` y `GLOBAL_LOG`; los datos se encapsulan en dataclasses inmutables.
+    - **Calidad del código:** funciones con responsabilidad única, validaciones explícitas y pruebas unitarias más rápidas (~0.04 s vs ~11.6 s).
+    - **Escalabilidad:** el coste crece de forma lineal con el número de rondas y cabe aumentar jugadores/rondas sin penalizaciones abruptas.
