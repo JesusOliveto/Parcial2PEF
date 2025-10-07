@@ -161,8 +161,10 @@ def _render_game_view() -> None:
 			)
 		)
 
-	# Ahora mostramos la ronda ya incrementada si se pulsó el botón en este ciclo.
-	st.markdown(f"### Ronda actual: {st.session_state['round']}")
+	# Mostrar la ronda al usuario iniciando en 1 (evitar mostrar 0 tras reinicio).
+	# Internamente 'round' representa rondas completadas; si es 0, se muestra 1 como primera ronda.
+	current_round_display = st.session_state["round"] if st.session_state["round"] > 0 else 1
+	st.markdown(f"### Ronda actual: {current_round_display}")
 
 	_reset_col, _ = st.columns([1, 3])
 	with _reset_col:
