@@ -139,8 +139,10 @@ def _render_game_view() -> None:
 		placeholder.markdown(_dice_art(st.session_state["last_faces"][idx]))
 		placeholders.append(placeholder)
 
-	st.markdown(f"### Ronda actual: {st.session_state['round']}")
-	if st.button("Lanzar dados 🎲"):
+	# FIX: Para evitar que el contador de ronda quede "una por detrás" mostramos el botón primero,
+	# procesamos la acción y luego pintamos el encabezado con el valor actualizado.
+	lanzar = st.button("Lanzar dados 🎲")
+	if lanzar:
 		final_faces = [random.randint(1, 6) for _ in range(4)]
 		_animate_roll(placeholders, final_faces)
 		st.session_state["last_faces"] = final_faces
@@ -158,6 +160,9 @@ def _render_game_view() -> None:
 				]
 			)
 		)
+
+	# Ahora mostramos la ronda ya incrementada si se pulsó el botón en este ciclo.
+	st.markdown(f"### Ronda actual: {st.session_state['round']}")
 
 	_reset_col, _ = st.columns([1, 3])
 	with _reset_col:
