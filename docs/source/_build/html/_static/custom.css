@@ -1,67 +1,234 @@
-/* Mejorar legibilidad */
+/* ===== TEMA CLARO MEJORADO ===== */
+
+/* Fondo general más claro */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    line-height: 1.6;
+    background-color: #ffffff;
+    color: #1e293b;
+    line-height: 1.7;
 }
 
-/* Encabezados */
-h1, h2, h3, h4, h5, h6 {
-    color: #2c3e50;
+/* Mejor separación entre funciones/clases */
+.sig {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border: 2px solid #e2e8f0;
+    border-left: 5px solid #3b82f6;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+}
+
+.sig:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    border-left-color: #1d4ed8;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+/* Separación clara entre elementos */
+.py.class, .py.function, .py.method, .py.attribute {
+    margin: 2.5rem 0;
+    padding: 2rem 0;
+    border-bottom: 3px solid #f1f5f9;
+}
+
+.py.class:last-child, .py.function:last-child {
+    border-bottom: none;
+}
+
+/* Títulos de funciones/clases más destacados */
+.sig-name {
+    color: #1e40af;
+    font-weight: 800;
+    font-size: 1.4em;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.sig-prename {
+    color: #475569;
     font-weight: 600;
 }
 
-/* Código */
-code {
-    background-color: #f8f9fa;
-    border: 1px solid #e9ecef;
+/* Parámetros más legibles */
+.sig-param {
+    color: #4b5563;
+    font-style: normal;
+    background: #f8fafc;
+    padding: 0.2rem 0.5rem;
     border-radius: 4px;
-    padding: 2px 6px;
-    color: #e83e8c;
+    border: 1px solid #e5e7eb;
 }
 
-/* Bloques de código */
-pre {
-    border-left: 4px solid #3498db;
-    background-color: #f8f9fa;
-    border-radius: 0 6px 6px 0;
+/* Docstrings con fondo claro pero diferenciado */
+.docstring {
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+    background: #f8fafc;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    border-left: 4px solid #60a5fa;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
 }
 
-/* Tablas */
+/* Secciones dentro de docstrings */
+.rubric {
+    color: #1e40af;
+    font-weight: 700;
+    font-size: 1.1em;
+    margin: 1.5rem 0 1rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 3px solid #dbeafe;
+}
+
+/* Listas en docstrings */
+.docstring ul, .docstring ol {
+    margin: 1rem 0;
+    padding-left: 2rem;
+}
+
+.docstring li {
+    margin: 0.5rem 0;
+    line-height: 1.6;
+    color: #4b5563;
+}
+
+/* Código en docstrings - fondo claro */
+.docstring code {
+    background: #f1f5f9;
+    color: #dc2626;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    border: 1px solid #e2e8f0;
+    font-size: 0.9em;
+}
+
+.docstring pre {
+    background: #f8fafc;
+    color: #1e293b;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1rem 0;
+}
+
+/* Tablas con diseño limpio */
 table {
     border-collapse: collapse;
     width: 100%;
-    margin: 1em 0;
-}
-
-table, th, td {
-    border: 1px solid #ddd;
-}
-
-th, td {
-    padding: 12px;
-    text-align: left;
+    margin: 1.5rem 0;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    border: 1px solid #e2e8f0;
 }
 
 th {
-    background-color: #3498db;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    color: #1e40af;
+    font-weight: 700;
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 2px solid #d1d5db;
+}
+
+td {
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid #f1f5f9;
+    color: #4b5563;
+}
+
+tr:hover {
+    background: #f8fafc;
+}
+
+/* Notas y advertencias con fondos suaves */
+.note, .warning, .tip {
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    border-radius: 8px;
+    border-left: 5px solid;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.note {
+    border-left-color: #3b82f6;
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+}
+
+.warning {
+    border-left-color: #f59e0b;
+    background: linear-gradient(135deg, #fefce8 0%, #fef3c7 100%);
+}
+
+.tip {
+    border-left-color: #10b981;
+    background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+}
+
+/* Sidebar más claro */
+.sidebar-drawer {
+    background: #f8fafc;
+    border-right: 1px solid #e2e8f0;
+}
+
+.sidebar-tree .toctree-l1 {
+    margin: 0.5rem 0;
+}
+
+.sidebar-tree a {
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    transition: all 0.2s ease;
+    color: #475569;
+    font-weight: 500;
+}
+
+.sidebar-tree a:hover {
+    background: #e0f2fe;
+    color: #1e40af;
+    transform: translateX(5px);
+}
+
+.sidebar-tree .current {
+    background: #3b82f6;
     color: white;
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
 }
 
-/* Enlaces */
-a {
-    color: #3498db;
-    text-decoration: none;
+/* Encabezados con mejor contraste */
+h1, h2, h3, h4, h5, h6 {
+    color: #1e293b;
+    font-weight: 700;
+    margin-top: 2rem;
 }
 
-a:hover {
-    color: #2980b9;
-    text-decoration: underline;
+h1 {
+    color: #1e40af;
+    border-bottom: 3px solid #dbeafe;
+    padding-bottom: 0.5rem;
 }
 
-/* Clases y funciones */
-.sig {
-    background-color: #ecf0f1;
-    padding: 10px;
-    border-radius: 5px;
-    margin: 10px 0;
+/* Mejorar contraste general */
+.content {
+    background: white;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .sig {
+        padding: 1.2rem;
+        margin: 1.5rem 0;
+    }
+    
+    .py.class, .py.function {
+        margin: 2rem 0;
+        padding: 1.5rem 0;
+    }
+}
+
+/* Scroll suave */
+html {
+    scroll-behavior: smooth;
 }

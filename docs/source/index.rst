@@ -33,18 +33,3 @@ Para comenzar a usar el proyecto:
 
    # Ejecutar la aplicación Streamlit
    streamlit run implementacionRefactorizadoStreamlit.py
-
-Documentación Automática
-------------------------
-
-.. automodule:: CodigoRefactorizado
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Indices y tablas
-================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`

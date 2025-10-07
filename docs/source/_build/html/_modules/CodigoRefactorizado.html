@@ -9,7 +9,7 @@
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=580074bf" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=4b87c4f6" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=5151626d" />
     
     
 
@@ -18,18 +18,47 @@
   body {
     --color-code-background: #f2f2f2;
   --color-code-foreground: #1e1e1e;
+  --color-brand-primary: #1e40af;
+  --color-brand-content: #1e40af;
+  --color-background-primary: #ffffff;
+  --color-background-secondary: #f8fafc;
+  --color-background-border: #e2e8f0;
+  --color-sidebar-background: #f1f5f9;
+  --color-sidebar-background-border: #e2e8f0;
+  --color-sidebar-caption-text: #475569;
+  --color-sidebar-link-text: #334155;
+  --color-sidebar-item-background: transparent;
+  --color-sidebar-item-background--current: #dbeafe;
+  --color-sidebar-item-text--current: #1e40af;
+  --color-sidebar-item-expander-background: transparent;
+  --color-sidebar-item-expander-background--hover: #e2e8f0;
+  --color-foreground-primary: #1e293b;
+  --color-foreground-secondary: #475569;
+  --color-foreground-muted: #64748b;
+  --color-foreground-border: #cbd5e1;
+  --color-code-background: #f1f5f9;
+  --color-code-foreground: #1e293b;
+  --color-toc-background: #ffffff;
   
   }
   @media not print {
     body[data-theme="dark"] {
       --color-code-background: #202020;
   --color-code-foreground: #d0d0d0;
+  --color-brand-primary: #60a5fa;
+  --color-brand-content: #60a5fa;
+  --color-background-primary: #0f172a;
+  --color-background-secondary: #1e293b;
   
     }
     @media (prefers-color-scheme: dark) {
       body:not([data-theme="light"]) {
         --color-code-background: #202020;
   --color-code-foreground: #d0d0d0;
+  --color-brand-primary: #60a5fa;
+  --color-brand-content: #60a5fa;
+  --color-background-primary: #0f172a;
+  --color-background-secondary: #1e293b;
   
       }
     }
@@ -151,7 +180,11 @@
 
 <a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
 
-
+<div class="announcement">
+  <aside class="announcement-content">
+     <em>Documentación del Simulador de Dados</em> 
+  </aside>
+</div>
 
 <div class="page">
   <header class="mobile-header">
@@ -195,6 +228,7 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="../modules.html">Módulos</a><input aria-label="Toggle navigation of Módulos" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../CodigoRefactorizado.html">Código Refactorizado</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../CodigoSinRefactorizar.html">Código No Refactorizado</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ImplementacionRefactorizadoStreamlit.html">ImplementacionRefactorizadoStreamlit module</a></li>
 </ul>
 </li>
 </ul>
@@ -250,7 +284,7 @@
 	<span class="n">profile</span>  <span class="c1"># type: ignore[name-defined]</span>
 <span class="k">except</span> <span class="ne">NameError</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
 <div class="viewcode-block" id="profile">
-<a class="viewcode-back" href="../index.html#CodigoRefactorizado.profile">[docs]</a>
+<a class="viewcode-back" href="../CodigoRefactorizado.html#CodigoRefactorizado.profile">[docs]</a>
 	<span class="k">def</span><span class="w"> </span><span class="nf">profile</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
 		<span class="k">return</span> <span class="n">func</span></div>
 
@@ -260,7 +294,7 @@
 
 
 <div class="viewcode-block" id="PlayerStats">
-<a class="viewcode-back" href="../index.html#CodigoRefactorizado.PlayerStats">[docs]</a>
+<a class="viewcode-back" href="../CodigoRefactorizado.html#CodigoRefactorizado.PlayerStats">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">PlayerStats</span><span class="p">:</span>
 <span class="w">	</span><span class="sd">&quot;&quot;&quot;Representa las estadísticas agregadas de un jugador.&quot;&quot;&quot;</span>
@@ -271,7 +305,7 @@
 	<span class="n">most_common_value</span><span class="p">:</span> <span class="nb">int</span>
 
 <div class="viewcode-block" id="PlayerStats.from_arrays">
-<a class="viewcode-back" href="../index.html#CodigoRefactorizado.PlayerStats.from_arrays">[docs]</a>
+<a class="viewcode-back" href="../CodigoRefactorizado.html#CodigoRefactorizado.PlayerStats.from_arrays">[docs]</a>
 	<span class="nd">@classmethod</span>
 	<span class="k">def</span><span class="w"> </span><span class="nf">from_arrays</span><span class="p">(</span>
 		<span class="bp">cls</span><span class="p">,</span>
@@ -292,7 +326,7 @@
 
 
 <div class="viewcode-block" id="PlayerStats.probability_distribution">
-<a class="viewcode-back" href="../index.html#CodigoRefactorizado.PlayerStats.probability_distribution">[docs]</a>
+<a class="viewcode-back" href="../CodigoRefactorizado.html#CodigoRefactorizado.PlayerStats.probability_distribution">[docs]</a>
 	<span class="k">def</span><span class="w"> </span><span class="nf">probability_distribution</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
 <span class="w">		</span><span class="sd">&quot;&quot;&quot;Calcula la distribución de probabilidad empírica para el jugador.&quot;&quot;&quot;</span>
 
@@ -308,7 +342,7 @@
 
 
 <div class="viewcode-block" id="GameStatistics">
-<a class="viewcode-back" href="../index.html#CodigoRefactorizado.GameStatistics">[docs]</a>
+<a class="viewcode-back" href="../CodigoRefactorizado.html#CodigoRefactorizado.GameStatistics">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">GameStatistics</span><span class="p">:</span>
 <span class="w">	</span><span class="sd">&quot;&quot;&quot;Agrupa el resultado completo de una simulación.&quot;&quot;&quot;</span>
@@ -318,7 +352,7 @@
 	<span class="n">winner</span><span class="p">:</span> <span class="n">PlayerStats</span>
 
 <div class="viewcode-block" id="GameStatistics.to_dict">
-<a class="viewcode-back" href="../index.html#CodigoRefactorizado.GameStatistics.to_dict">[docs]</a>
+<a class="viewcode-back" href="../CodigoRefactorizado.html#CodigoRefactorizado.GameStatistics.to_dict">[docs]</a>
 	<span class="k">def</span><span class="w"> </span><span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">object</span><span class="p">]:</span>
 <span class="w">		</span><span class="sd">&quot;&quot;&quot;Serializa la estadística del juego a un diccionario estándar.&quot;&quot;&quot;</span>
 
@@ -365,7 +399,7 @@
 
 
 <div class="viewcode-block" id="simulate_dice_game">
-<a class="viewcode-back" href="../index.html#CodigoRefactorizado.simulate_dice_game">[docs]</a>
+<a class="viewcode-back" href="../CodigoRefactorizado.html#CodigoRefactorizado.simulate_dice_game">[docs]</a>
 <span class="nd">@profile</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">simulate_dice_game</span><span class="p">(</span>
 	<span class="n">num_players</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
@@ -430,7 +464,7 @@
 
 
 <div class="viewcode-block" id="simulate_probabilities">
-<a class="viewcode-back" href="../index.html#CodigoRefactorizado.simulate_probabilities">[docs]</a>
+<a class="viewcode-back" href="../CodigoRefactorizado.html#CodigoRefactorizado.simulate_probabilities">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">simulate_probabilities</span><span class="p">(</span>
 	<span class="n">num_players</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
 	<span class="n">num_rounds</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
@@ -458,7 +492,7 @@
 
 
 <div class="viewcode-block" id="benchmark_simulator">
-<a class="viewcode-back" href="../index.html#CodigoRefactorizado.benchmark_simulator">[docs]</a>
+<a class="viewcode-back" href="../CodigoRefactorizado.html#CodigoRefactorizado.benchmark_simulator">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">benchmark_simulator</span><span class="p">(</span>
 	<span class="n">num_players</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
 	<span class="n">num_rounds</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
@@ -488,7 +522,7 @@
 
 
 <div class="viewcode-block" id="profile_with_cprofile">
-<a class="viewcode-back" href="../index.html#CodigoRefactorizado.profile_with_cprofile">[docs]</a>
+<a class="viewcode-back" href="../CodigoRefactorizado.html#CodigoRefactorizado.profile_with_cprofile">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">profile_with_cprofile</span><span class="p">(</span><span class="n">num_players</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">num_rounds</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100_000</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">	</span><span class="sd">&quot;&quot;&quot;Ejecuta ``cProfile`` sobre la simulación y devuelve un resumen.</span>
 
@@ -516,12 +550,12 @@
 
 
 <div class="viewcode-block" id="DiceGameTests">
-<a class="viewcode-back" href="../index.html#CodigoRefactorizado.DiceGameTests">[docs]</a>
+<a class="viewcode-back" href="../CodigoRefactorizado.html#CodigoRefactorizado.DiceGameTests">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">DiceGameTests</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
 <span class="w">	</span><span class="sd">&quot;&quot;&quot;Casos de prueba que aseguran la corrección estadística del simulador.&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="DiceGameTests.test_rolls_within_range">
-<a class="viewcode-back" href="../index.html#CodigoRefactorizado.DiceGameTests.test_rolls_within_range">[docs]</a>
+<a class="viewcode-back" href="../CodigoRefactorizado.html#CodigoRefactorizado.DiceGameTests.test_rolls_within_range">[docs]</a>
 	<span class="k">def</span><span class="w"> </span><span class="nf">test_rolls_within_range</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 		<span class="n">stats</span> <span class="o">=</span> <span class="n">simulate_dice_game</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2_000</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
 		<span class="k">for</span> <span class="n">player</span> <span class="ow">in</span> <span class="n">stats</span><span class="o">.</span><span class="n">players</span><span class="p">:</span>
@@ -531,7 +565,7 @@
 
 
 <div class="viewcode-block" id="DiceGameTests.test_probability_sum_is_one">
-<a class="viewcode-back" href="../index.html#CodigoRefactorizado.DiceGameTests.test_probability_sum_is_one">[docs]</a>
+<a class="viewcode-back" href="../CodigoRefactorizado.html#CodigoRefactorizado.DiceGameTests.test_probability_sum_is_one">[docs]</a>
 	<span class="k">def</span><span class="w"> </span><span class="nf">test_probability_sum_is_one</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 		<span class="n">probabilities</span> <span class="o">=</span> <span class="n">simulate_probabilities</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">50_000</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">10_000</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">123</span><span class="p">)</span>
 		<span class="k">for</span> <span class="n">distribution</span> <span class="ow">in</span> <span class="n">probabilities</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
@@ -541,7 +575,7 @@
 
 
 <div class="viewcode-block" id="run_tests">
-<a class="viewcode-back" href="../index.html#CodigoRefactorizado.run_tests">[docs]</a>
+<a class="viewcode-back" href="../CodigoRefactorizado.html#CodigoRefactorizado.run_tests">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">run_tests</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">	</span><span class="sd">&quot;&quot;&quot;Ejecuta la batería de pruebas unitarias incluida en el módulo.&quot;&quot;&quot;</span>
 
@@ -551,7 +585,7 @@
 
 
 <div class="viewcode-block" id="main">
-<a class="viewcode-back" href="../index.html#CodigoRefactorizado.main">[docs]</a>
+<a class="viewcode-back" href="../CodigoRefactorizado.html#CodigoRefactorizado.main">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">	</span><span class="sd">&quot;&quot;&quot;Punto de entrada de línea de comandos para la versión refactorizada.&quot;&quot;&quot;</span>
 

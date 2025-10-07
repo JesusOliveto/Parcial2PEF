@@ -10,7 +10,7 @@
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=580074bf" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=4b87c4f6" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=5151626d" />
     
     
 
@@ -19,18 +19,47 @@
   body {
     --color-code-background: #f2f2f2;
   --color-code-foreground: #1e1e1e;
+  --color-brand-primary: #1e40af;
+  --color-brand-content: #1e40af;
+  --color-background-primary: #ffffff;
+  --color-background-secondary: #f8fafc;
+  --color-background-border: #e2e8f0;
+  --color-sidebar-background: #f1f5f9;
+  --color-sidebar-background-border: #e2e8f0;
+  --color-sidebar-caption-text: #475569;
+  --color-sidebar-link-text: #334155;
+  --color-sidebar-item-background: transparent;
+  --color-sidebar-item-background--current: #dbeafe;
+  --color-sidebar-item-text--current: #1e40af;
+  --color-sidebar-item-expander-background: transparent;
+  --color-sidebar-item-expander-background--hover: #e2e8f0;
+  --color-foreground-primary: #1e293b;
+  --color-foreground-secondary: #475569;
+  --color-foreground-muted: #64748b;
+  --color-foreground-border: #cbd5e1;
+  --color-code-background: #f1f5f9;
+  --color-code-foreground: #1e293b;
+  --color-toc-background: #ffffff;
   
   }
   @media not print {
     body[data-theme="dark"] {
       --color-code-background: #202020;
   --color-code-foreground: #d0d0d0;
+  --color-brand-primary: #60a5fa;
+  --color-brand-content: #60a5fa;
+  --color-background-primary: #0f172a;
+  --color-background-secondary: #1e293b;
   
     }
     @media (prefers-color-scheme: dark) {
       body:not([data-theme="light"]) {
         --color-code-background: #202020;
   --color-code-foreground: #d0d0d0;
+  --color-brand-primary: #60a5fa;
+  --color-brand-content: #60a5fa;
+  --color-background-primary: #0f172a;
+  --color-background-secondary: #1e293b;
   
       }
     }
@@ -152,7 +181,11 @@
 
 <a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
 
-
+<div class="announcement">
+  <aside class="announcement-content">
+     <em>Documentación del Simulador de Dados</em> 
+  </aside>
+</div>
 
 <div class="page">
   <header class="mobile-header">
@@ -196,6 +229,7 @@
 <li class="toctree-l1 current has-children current-page"><a class="current reference internal" href="#">Módulos</a><input aria-label="Toggle navigation of Módulos" checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="CodigoRefactorizado.html">Código Refactorizado</a></li>
 <li class="toctree-l2"><a class="reference internal" href="CodigoSinRefactorizar.html">Código No Refactorizado</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ImplementacionRefactorizadoStreamlit.html">ImplementacionRefactorizadoStreamlit module</a></li>
 </ul>
 </li>
 </ul>
@@ -287,6 +321,10 @@
 <li class="toctree-l2"><a class="reference internal" href="CodigoSinRefactorizar.html#CodigoSinRefactorizar.profile"><code class="docutils literal notranslate"><span class="pre">profile()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="CodigoSinRefactorizar.html#CodigoSinRefactorizar.simular_en_batches_sin_refactor"><code class="docutils literal notranslate"><span class="pre">simular_en_batches_sin_refactor()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="CodigoSinRefactorizar.html#CodigoSinRefactorizar.simular_juego_sin_refactor"><code class="docutils literal notranslate"><span class="pre">simular_juego_sin_refactor()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ImplementacionRefactorizadoStreamlit.html">ImplementacionRefactorizadoStreamlit module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ImplementacionRefactorizadoStreamlit.html#ImplementacionRefactorizadoStreamlit.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
 </ul>
 </li>
 </ul>

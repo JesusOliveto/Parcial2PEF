@@ -8,7 +8,7 @@
 <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=580074bf" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=4b87c4f6" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=5151626d" />
     
     
 
@@ -17,18 +17,47 @@
   body {
     --color-code-background: #f2f2f2;
   --color-code-foreground: #1e1e1e;
+  --color-brand-primary: #1e40af;
+  --color-brand-content: #1e40af;
+  --color-background-primary: #ffffff;
+  --color-background-secondary: #f8fafc;
+  --color-background-border: #e2e8f0;
+  --color-sidebar-background: #f1f5f9;
+  --color-sidebar-background-border: #e2e8f0;
+  --color-sidebar-caption-text: #475569;
+  --color-sidebar-link-text: #334155;
+  --color-sidebar-item-background: transparent;
+  --color-sidebar-item-background--current: #dbeafe;
+  --color-sidebar-item-text--current: #1e40af;
+  --color-sidebar-item-expander-background: transparent;
+  --color-sidebar-item-expander-background--hover: #e2e8f0;
+  --color-foreground-primary: #1e293b;
+  --color-foreground-secondary: #475569;
+  --color-foreground-muted: #64748b;
+  --color-foreground-border: #cbd5e1;
+  --color-code-background: #f1f5f9;
+  --color-code-foreground: #1e293b;
+  --color-toc-background: #ffffff;
   
   }
   @media not print {
     body[data-theme="dark"] {
       --color-code-background: #202020;
   --color-code-foreground: #d0d0d0;
+  --color-brand-primary: #60a5fa;
+  --color-brand-content: #60a5fa;
+  --color-background-primary: #0f172a;
+  --color-background-secondary: #1e293b;
   
     }
     @media (prefers-color-scheme: dark) {
       body:not([data-theme="light"]) {
         --color-code-background: #202020;
   --color-code-foreground: #d0d0d0;
+  --color-brand-primary: #60a5fa;
+  --color-brand-content: #60a5fa;
+  --color-background-primary: #0f172a;
+  --color-background-secondary: #1e293b;
   
       }
     }
@@ -150,7 +179,11 @@
 
 <a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
 
-
+<div class="announcement">
+  <aside class="announcement-content">
+     <em>Documentación del Simulador de Dados</em> 
+  </aside>
+</div>
 
 <div class="page">
   <header class="mobile-header">
@@ -194,6 +227,7 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="modules.html">Módulos</a><input aria-label="Toggle navigation of Módulos" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="CodigoRefactorizado.html">Código Refactorizado</a></li>
 <li class="toctree-l2"><a class="reference internal" href="CodigoSinRefactorizar.html">Código No Refactorizado</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ImplementacionRefactorizadoStreamlit.html">ImplementacionRefactorizadoStreamlit module</a></li>
 </ul>
 </li>
 </ul>
@@ -231,16 +265,16 @@
           
 <section class="genindex-section">
   <h1 id="index">Index</h1>
-  <div class="genindex-jumpbox"><a href="#_"><strong>_</strong></a> | <a href="#B"><strong>B</strong></a> | <a href="#C"><strong>C</strong></a> | <a href="#D"><strong>D</strong></a> | <a href="#E"><strong>E</strong></a> | <a href="#F"><strong>F</strong></a> | <a href="#G"><strong>G</strong></a> | <a href="#M"><strong>M</strong></a> | <a href="#P"><strong>P</strong></a> | <a href="#R"><strong>R</strong></a> | <a href="#S"><strong>S</strong></a> | <a href="#T"><strong>T</strong></a> | <a href="#W"><strong>W</strong></a></div>
+  <div class="genindex-jumpbox"><a href="#_"><strong>_</strong></a> | <a href="#B"><strong>B</strong></a> | <a href="#C"><strong>C</strong></a> | <a href="#D"><strong>D</strong></a> | <a href="#E"><strong>E</strong></a> | <a href="#F"><strong>F</strong></a> | <a href="#G"><strong>G</strong></a> | <a href="#I"><strong>I</strong></a> | <a href="#M"><strong>M</strong></a> | <a href="#P"><strong>P</strong></a> | <a href="#R"><strong>R</strong></a> | <a href="#S"><strong>S</strong></a> | <a href="#T"><strong>T</strong></a> | <a href="#W"><strong>W</strong></a></div>
 </section>
 <section id="_" class="genindex-section">
   <h2>_</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="CodigoRefactorizado.html#CodigoRefactorizado.GameStatistics.__init__">__init__() (CodigoRefactorizado.GameStatistics method)</a>, <a href="index.html#CodigoRefactorizado.GameStatistics.__init__">[1]</a>
+        <li><a href="CodigoRefactorizado.html#CodigoRefactorizado.GameStatistics.__init__">__init__() (CodigoRefactorizado.GameStatistics method)</a>
 
         <ul>
-          <li><a href="CodigoRefactorizado.html#CodigoRefactorizado.PlayerStats.__init__">(CodigoRefactorizado.PlayerStats method)</a>, <a href="index.html#CodigoRefactorizado.PlayerStats.__init__">[1]</a>
+          <li><a href="CodigoRefactorizado.html#CodigoRefactorizado.PlayerStats.__init__">(CodigoRefactorizado.PlayerStats method)</a>
 </li>
         </ul></li>
     </ul></td>
@@ -251,7 +285,7 @@
   <h2>B</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="CodigoRefactorizado.html#CodigoRefactorizado.benchmark_simulator">benchmark_simulator() (in module CodigoRefactorizado)</a>, <a href="index.html#CodigoRefactorizado.benchmark_simulator">[1]</a>
+        <li><a href="CodigoRefactorizado.html#CodigoRefactorizado.benchmark_simulator">benchmark_simulator() (in module CodigoRefactorizado)</a>
 </li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
@@ -269,7 +303,7 @@
     CodigoRefactorizado
 
         <ul>
-          <li><a href="CodigoRefactorizado.html#module-CodigoRefactorizado">module</a>, <a href="index.html#module-CodigoRefactorizado">[1]</a>
+          <li><a href="CodigoRefactorizado.html#module-CodigoRefactorizado">module</a>
 </li>
         </ul></li>
     </ul></td>
@@ -289,7 +323,7 @@
   <h2>D</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="CodigoRefactorizado.html#CodigoRefactorizado.DiceGameTests">DiceGameTests (class in CodigoRefactorizado)</a>, <a href="index.html#CodigoRefactorizado.DiceGameTests">[1]</a>
+        <li><a href="CodigoRefactorizado.html#CodigoRefactorizado.DiceGameTests">DiceGameTests (class in CodigoRefactorizado)</a>
 </li>
     </ul></td>
   </tr></table>
@@ -309,11 +343,11 @@
   <h2>F</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="CodigoRefactorizado.html#CodigoRefactorizado.PlayerStats.frequencies">frequencies (CodigoRefactorizado.PlayerStats attribute)</a>, <a href="index.html#CodigoRefactorizado.PlayerStats.frequencies">[1]</a>
+        <li><a href="CodigoRefactorizado.html#CodigoRefactorizado.PlayerStats.frequencies">frequencies (CodigoRefactorizado.PlayerStats attribute)</a>
 </li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="CodigoRefactorizado.html#CodigoRefactorizado.PlayerStats.from_arrays">from_arrays() (CodigoRefactorizado.PlayerStats class method)</a>, <a href="index.html#CodigoRefactorizado.PlayerStats.from_arrays">[1]</a>
+        <li><a href="CodigoRefactorizado.html#CodigoRefactorizado.PlayerStats.from_arrays">from_arrays() (CodigoRefactorizado.PlayerStats class method)</a>
 </li>
     </ul></td>
   </tr></table>
@@ -323,7 +357,7 @@
   <h2>G</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="CodigoRefactorizado.html#CodigoRefactorizado.GameStatistics">GameStatistics (class in CodigoRefactorizado)</a>, <a href="index.html#CodigoRefactorizado.GameStatistics">[1]</a>
+        <li><a href="CodigoRefactorizado.html#CodigoRefactorizado.GameStatistics">GameStatistics (class in CodigoRefactorizado)</a>
 </li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
@@ -333,28 +367,47 @@
   </tr></table>
 </section>
 
+<section id="I" class="genindex-section">
+  <h2>I</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li>
+    ImplementacionRefactorizadoStreamlit
+
+        <ul>
+          <li><a href="ImplementacionRefactorizadoStreamlit.html#module-ImplementacionRefactorizadoStreamlit">module</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
 <section id="M" class="genindex-section">
   <h2>M</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="CodigoRefactorizado.html#CodigoRefactorizado.main">main() (in module CodigoRefactorizado)</a>, <a href="index.html#CodigoRefactorizado.main">[1]</a>
+        <li><a href="CodigoRefactorizado.html#CodigoRefactorizado.main">main() (in module CodigoRefactorizado)</a>
 
         <ul>
           <li><a href="CodigoSinRefactorizar.html#CodigoSinRefactorizar.main">(in module CodigoSinRefactorizar)</a>
+</li>
+          <li><a href="ImplementacionRefactorizadoStreamlit.html#ImplementacionRefactorizadoStreamlit.main">(in module ImplementacionRefactorizadoStreamlit)</a>
 </li>
         </ul></li>
         <li>
     module
 
         <ul>
-          <li><a href="CodigoRefactorizado.html#module-CodigoRefactorizado">CodigoRefactorizado</a>, <a href="index.html#module-CodigoRefactorizado">[1]</a>
+          <li><a href="CodigoRefactorizado.html#module-CodigoRefactorizado">CodigoRefactorizado</a>
 </li>
           <li><a href="CodigoSinRefactorizar.html#module-CodigoSinRefactorizar">CodigoSinRefactorizar</a>
+</li>
+          <li><a href="ImplementacionRefactorizadoStreamlit.html#module-ImplementacionRefactorizadoStreamlit">ImplementacionRefactorizadoStreamlit</a>
 </li>
         </ul></li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="CodigoRefactorizado.html#CodigoRefactorizado.PlayerStats.most_common_value">most_common_value (CodigoRefactorizado.PlayerStats attribute)</a>, <a href="index.html#CodigoRefactorizado.PlayerStats.most_common_value">[1]</a>
+        <li><a href="CodigoRefactorizado.html#CodigoRefactorizado.PlayerStats.most_common_value">most_common_value (CodigoRefactorizado.PlayerStats attribute)</a>
 </li>
     </ul></td>
   </tr></table>
@@ -366,23 +419,23 @@
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="CodigoSinRefactorizar.html#CodigoSinRefactorizar.perfil_con_cprofile">perfil_con_cprofile() (in module CodigoSinRefactorizar)</a>
 </li>
-        <li><a href="CodigoRefactorizado.html#CodigoRefactorizado.PlayerStats.player_id">player_id (CodigoRefactorizado.PlayerStats attribute)</a>, <a href="index.html#CodigoRefactorizado.PlayerStats.player_id">[1]</a>
+        <li><a href="CodigoRefactorizado.html#CodigoRefactorizado.PlayerStats.player_id">player_id (CodigoRefactorizado.PlayerStats attribute)</a>
 </li>
-        <li><a href="CodigoRefactorizado.html#CodigoRefactorizado.GameStatistics.players">players (CodigoRefactorizado.GameStatistics attribute)</a>, <a href="index.html#CodigoRefactorizado.GameStatistics.players">[1]</a>
+        <li><a href="CodigoRefactorizado.html#CodigoRefactorizado.GameStatistics.players">players (CodigoRefactorizado.GameStatistics attribute)</a>
 </li>
-        <li><a href="CodigoRefactorizado.html#CodigoRefactorizado.PlayerStats">PlayerStats (class in CodigoRefactorizado)</a>, <a href="index.html#CodigoRefactorizado.PlayerStats">[1]</a>
+        <li><a href="CodigoRefactorizado.html#CodigoRefactorizado.PlayerStats">PlayerStats (class in CodigoRefactorizado)</a>
 </li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="CodigoRefactorizado.html#CodigoRefactorizado.PlayerStats.probability_distribution">probability_distribution() (CodigoRefactorizado.PlayerStats method)</a>, <a href="index.html#CodigoRefactorizado.PlayerStats.probability_distribution">[1]</a>
+        <li><a href="CodigoRefactorizado.html#CodigoRefactorizado.PlayerStats.probability_distribution">probability_distribution() (CodigoRefactorizado.PlayerStats method)</a>
 </li>
-        <li><a href="CodigoRefactorizado.html#CodigoRefactorizado.profile">profile() (in module CodigoRefactorizado)</a>, <a href="index.html#CodigoRefactorizado.profile">[1]</a>
+        <li><a href="CodigoRefactorizado.html#CodigoRefactorizado.profile">profile() (in module CodigoRefactorizado)</a>
 
         <ul>
           <li><a href="CodigoSinRefactorizar.html#CodigoSinRefactorizar.profile">(in module CodigoSinRefactorizar)</a>
 </li>
         </ul></li>
-        <li><a href="CodigoRefactorizado.html#CodigoRefactorizado.profile_with_cprofile">profile_with_cprofile() (in module CodigoRefactorizado)</a>, <a href="index.html#CodigoRefactorizado.profile_with_cprofile">[1]</a>
+        <li><a href="CodigoRefactorizado.html#CodigoRefactorizado.profile_with_cprofile">profile_with_cprofile() (in module CodigoRefactorizado)</a>
 </li>
     </ul></td>
   </tr></table>
@@ -392,7 +445,7 @@
   <h2>R</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="CodigoRefactorizado.html#CodigoRefactorizado.run_tests">run_tests() (in module CodigoRefactorizado)</a>, <a href="index.html#CodigoRefactorizado.run_tests">[1]</a>
+        <li><a href="CodigoRefactorizado.html#CodigoRefactorizado.run_tests">run_tests() (in module CodigoRefactorizado)</a>
 </li>
     </ul></td>
   </tr></table>
@@ -408,9 +461,9 @@
 </li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="CodigoRefactorizado.html#CodigoRefactorizado.simulate_dice_game">simulate_dice_game() (in module CodigoRefactorizado)</a>, <a href="index.html#CodigoRefactorizado.simulate_dice_game">[1]</a>
+        <li><a href="CodigoRefactorizado.html#CodigoRefactorizado.simulate_dice_game">simulate_dice_game() (in module CodigoRefactorizado)</a>
 </li>
-        <li><a href="CodigoRefactorizado.html#CodigoRefactorizado.simulate_probabilities">simulate_probabilities() (in module CodigoRefactorizado)</a>, <a href="index.html#CodigoRefactorizado.simulate_probabilities">[1]</a>
+        <li><a href="CodigoRefactorizado.html#CodigoRefactorizado.simulate_probabilities">simulate_probabilities() (in module CodigoRefactorizado)</a>
 </li>
     </ul></td>
   </tr></table>
@@ -422,9 +475,9 @@
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="CodigoSinRefactorizar.html#CodigoSinRefactorizar.TestSimuladorSinRefactor.test_probabilidades_sumadas">test_probabilidades_sumadas() (CodigoSinRefactorizar.TestSimuladorSinRefactor method)</a>
 </li>
-        <li><a href="CodigoRefactorizado.html#CodigoRefactorizado.DiceGameTests.test_probability_sum_is_one">test_probability_sum_is_one() (CodigoRefactorizado.DiceGameTests method)</a>, <a href="index.html#CodigoRefactorizado.DiceGameTests.test_probability_sum_is_one">[1]</a>
+        <li><a href="CodigoRefactorizado.html#CodigoRefactorizado.DiceGameTests.test_probability_sum_is_one">test_probability_sum_is_one() (CodigoRefactorizado.DiceGameTests method)</a>
 </li>
-        <li><a href="CodigoRefactorizado.html#CodigoRefactorizado.DiceGameTests.test_rolls_within_range">test_rolls_within_range() (CodigoRefactorizado.DiceGameTests method)</a>, <a href="index.html#CodigoRefactorizado.DiceGameTests.test_rolls_within_range">[1]</a>
+        <li><a href="CodigoRefactorizado.html#CodigoRefactorizado.DiceGameTests.test_rolls_within_range">test_rolls_within_range() (CodigoRefactorizado.DiceGameTests method)</a>
 </li>
         <li><a href="CodigoSinRefactorizar.html#CodigoSinRefactorizar.TestSimuladorSinRefactor.test_tirada_en_rango">test_tirada_en_rango() (CodigoSinRefactorizar.TestSimuladorSinRefactor method)</a>
 </li>
@@ -432,11 +485,11 @@
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="CodigoSinRefactorizar.html#CodigoSinRefactorizar.TestSimuladorSinRefactor">TestSimuladorSinRefactor (class in CodigoSinRefactorizar)</a>
 </li>
-        <li><a href="CodigoRefactorizado.html#CodigoRefactorizado.GameStatistics.to_dict">to_dict() (CodigoRefactorizado.GameStatistics method)</a>, <a href="index.html#CodigoRefactorizado.GameStatistics.to_dict">[1]</a>
+        <li><a href="CodigoRefactorizado.html#CodigoRefactorizado.GameStatistics.to_dict">to_dict() (CodigoRefactorizado.GameStatistics method)</a>
 </li>
-        <li><a href="CodigoRefactorizado.html#CodigoRefactorizado.PlayerStats.total_points">total_points (CodigoRefactorizado.PlayerStats attribute)</a>, <a href="index.html#CodigoRefactorizado.PlayerStats.total_points">[1]</a>
+        <li><a href="CodigoRefactorizado.html#CodigoRefactorizado.PlayerStats.total_points">total_points (CodigoRefactorizado.PlayerStats attribute)</a>
 </li>
-        <li><a href="CodigoRefactorizado.html#CodigoRefactorizado.GameStatistics.total_rounds">total_rounds (CodigoRefactorizado.GameStatistics attribute)</a>, <a href="index.html#CodigoRefactorizado.GameStatistics.total_rounds">[1]</a>
+        <li><a href="CodigoRefactorizado.html#CodigoRefactorizado.GameStatistics.total_rounds">total_rounds (CodigoRefactorizado.GameStatistics attribute)</a>
 </li>
     </ul></td>
   </tr></table>
@@ -446,7 +499,7 @@
   <h2>W</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="CodigoRefactorizado.html#CodigoRefactorizado.GameStatistics.winner">winner (CodigoRefactorizado.GameStatistics attribute)</a>, <a href="index.html#CodigoRefactorizado.GameStatistics.winner">[1]</a>
+        <li><a href="CodigoRefactorizado.html#CodigoRefactorizado.GameStatistics.winner">winner (CodigoRefactorizado.GameStatistics attribute)</a>
 </li>
     </ul></td>
   </tr></table>
