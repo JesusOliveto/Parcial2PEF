@@ -220,13 +220,51 @@ def _render_simulator_view() -> None:
 
 	num_players = st.slider("Número de jugadores", min_value=1, max_value=4, value=4)
 	num_rounds = st.number_input(
-		"Número de rondas", min_value=1, max_value=5_000_000, value=1_000_000, step=50_000
+		"Número de rondas", min_value=1, max_value=5_000_000, value=1_000_000, step=50_000,
+		help="Cantidad total de tiradas por jugador (mayor cifra = más precisión estadística pero más tiempo)."
 	)
 	batch_size = st.number_input(
-		"Tamaño de lote", min_value=1, max_value=1_000_000, value=100_000, step=10_000
+		"Tamaño de lote", min_value=1, max_value=1_000_000, value=100_000, step=10_000,
+		help="Número máximo de tiradas procesadas en un bloque. Un valor más alto reduce overhead pero aumenta uso puntual de memoria."
 	)
-	seed_value = st.number_input("Semilla (opcional)", min_value=0, value=0, step=1)
-	usar_semilla = st.checkbox("Usar semilla fija", value=False)
+	seed_value = st.number_input(
+		"Semilla (opcional)", min_value=0, value=0, step=1,
+		help="Fija la semilla para reproducir resultados. Se ignora si no marcas la casilla."
+	)
+	usar_semilla = st.checkbox("Usar semilla fija", value=False, help="Activa la semilla provista arriba para reproducibilidad.")
+
+	# Avisos dinámicos de validación / recomendación
+	# 1. batch mayor que rondas
+	if batch_size > num_rounds:
+		st.warning(
+			f"El tamaño de lote ({batch_size:,}) es mayor que las rondas ({num_rounds:,}). El último bloque será más pequeño; puedes reducir el lote para ser más eficiente."
+		)
+	# 2. lote demasiado pequeño para muchas rondas
+	if num_rounds / batch_size > 500:
+		st.info(
+			"Estás usando un tamaño de lote muy pequeño respecto al total de rondas. Aumentarlo puede acelerar el cálculo (menos iteraciones de bucle)."
+		)
+	# 3. sugerencia de tamaño de lote óptimo aproximado
+	recommended = min(max(10_000, num_rounds // 10), 100_000)
+	if batch_size < recommended and num_rounds > 50_000:
+		st.caption(
+			f"Sugerencia: un tamaño de lote cercano a {recommended:,} podría equilibrar rendimiento y memoria."
+		)
+	# 4. cálculo rápido de memoria estimada para el lote máximo
+	max_batch_bytes = batch_size * num_players * 8  # int64
+	if max_batch_bytes > 5_000_000:  # > ~5 MB
+		mb = max_batch_bytes / (1024 * 1024)
+		st.caption(
+			f"Uso de memoria estimado por lote: {mb:0.2f} MB (num_players × batch_size × 8 bytes)."
+		)
+	else:
+		kb = max_batch_bytes / 1024
+		st.caption(
+			f"Uso de memoria estimado por lote: {kb:0.1f} KB."
+		)
+	# 5. semilla
+	if not usar_semilla:
+		st.caption("Semilla no aplicada: resultados variarán en cada ejecución.")
 
 	if st.button("Ejecutar simulación masiva"):
 		st.write("Calculando...")
