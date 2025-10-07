@@ -7,6 +7,26 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath('../..'))  # Ruta al directorio raíz del proyecto
 
+# -- DIAGNÓSTICO --
+print("=== DIAGNÓSTICO SPHINX ===")
+print("sys.path:", sys.path)
+print("Directorio actual:", os.path.abspath('.'))
+print("Directorio raíz:", os.path.abspath('../..'))
+
+try:
+    import CodigoSinRefactorizar
+    print("✅ Sphinx PUEDE importar CodigoSinRefactorizar")
+    print("Funciones:", [x for x in dir(CodigoSinRefactorizar) if not x.startswith('_')])
+except Exception as e:
+    print(f"❌ Sphinx NO puede importar CodigoSinRefactorizar: {e}")
+
+try:
+    import CodigoRefactorizado
+    print("✅ Sphinx PUEDE importar CodigoRefactorizado")
+except Exception as e:
+    print(f"❌ Sphinx NO puede importar CodigoRefactorizado: {e}")
+# -- FIN DIAGNÓSTICO --
+
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
@@ -17,23 +37,16 @@ author = 'Olavarria-Lopez'
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = [  'sphinx.ext.autodoc',
-                'sphinx.ext.viewcode',
-                'sphinx.ext.napoleon',
-            ]
+extensions = [
+    'sphinx.ext.autodoc',
+    'sphinx.ext.viewcode',
+    'sphinx.ext.napoleon',
+]
 
-# TEMA Y ESTILOS
-html_theme = 'furo'
-html_static_path = ['_static']
-html_css_files = ['custom.css']
+templates_path = ['_templates']
+exclude_patterns = []
 
-# Opciones del tema
-html_theme_options = {
-    "sidebar_hide_name": False,
-    "navigation_with_keys": True,
-}
-
-# Configuración específica para autodoc
+# -- Configuración específica para autodoc --
 autodoc_default_options = {
     'members': True,
     'undoc-members': True,
@@ -46,13 +59,24 @@ autodoc_default_options = {
 # Para incluir docstrings de __init__
 autoclass_content = 'both'
 
-templates_path = ['_templates']
-exclude_patterns = []
-
-
+# Asegurar que no hay imports mockeados que interfieran
+autodoc_mock_imports = []
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = 'alabaster'
+# ⚠️ ELIMINÉ LA DUPLICACIÓN - Solo un html_theme
+html_theme = 'furo'
+
 html_static_path = ['_static']
+html_css_files = ['custom.css']
+
+# Opciones del tema Furo (corregidas)
+html_theme_options = {
+    # "sidebar_hide_name": False,  # ⚠️ Esta opción puede no existir en Furo
+    "navigation_with_keys": True,
+}
+
+# -- SETUP FINAL --
+def setup(app):
+    print("=== SETUP COMPLETADO ===")

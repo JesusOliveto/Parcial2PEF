@@ -20,7 +20,6 @@ Características principales:
    :hidden:
 
    modules
-   codigo_refactorizado
 
 Inicio Rápido
 -------------

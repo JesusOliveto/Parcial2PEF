@@ -185,7 +185,7 @@ def simulate_probabilities(
 ) -> Dict[int, Dict[int, float]]:
 	"""Calcula la distribución de probabilidades observada para cada jugador.
 
-	Refactorización: Replace Data with Object al reutilizar los objetos `PlayerStats`.
+	Refactorización: Replace Data with Object al reutilizar los objetos "PlayerStats".
 
 	Args:
 		num_players: Número de jugadores a simular.
