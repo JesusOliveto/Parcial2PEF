@@ -1,0 +1,125 @@
+CodigoSinRefactorizar: 
+
+PS C:\Users\Gsu\Documents\Parcial2PEF> py -m  kernprof -l -v .\CodigoSinRefactorizar.py
+Simulación completa:
+{'jugadores': [{'jugador': 'player_1', 'tiradas': 1000, 'frecuencias': {1: 163, 2: 182, 3: 155, 4: 147, 5: 186, 6: 167}, 'total': 3512, 'valor_mas_frecuente': 5, 'mensaje': 'Jugador player_1 obtuvo 3512 puntos'}, {'jugador': 'player_2', 'tiradas': 1000, 'frecuencias': {1: 176, 2: 154, 3: 166, 4: 164, 5: 163, 6: 177}, 'total': 3515, 'valor_mas_frecuente': 6, 'mensaje': 'Jugador player_2 obtuvo 3515 puntos'}, {'jugador': 'player_3', 'tiradas': 1000, 'frecuencias': {1: 174, 2: 144, 3: 189, 4: 147, 5: 193, 6: 153}, 'total': 3500, 'valor_mas_frecuente': 5, 'mensaje': 'Jugador player_3 obtuvo 3500 puntos'}, {'jugador': 'player_4', 'tiradas': 1000, 'frecuencias': {1: 158, 2: 164, 3: 175, 4: 174, 5: 170, 6: 159}, 'total': 3511, 'valor_mas_frecuente': 3, 'mensaje': 'Jugador player_4 obtuvo 3511 puntos'}], 'total_rondas': 1000, 'ganador': {'jugador': 'player_2', 'total': 3515}}
+Simulación en lotes (ineficiente):
+{'jugadores': [{'jugador': 'player_1', 'tiradas': 1000, 'frecuencias': {1: 179, 2: 152, 3: 171, 4: 172, 5: 167, 6: 159}, 'total': 3473, 'valor_mas_frecuente': 1, 'mensaje': 'Jugador player_1 obtuvo 3473 puntos'}, {'jugador': 'player_2', 'tiradas': 1000, 'frecuencias': {1: 164, 2: 200, 3: 161, 4: 144, 5: 176, 6: 155}, 'total': 3433, 'valor_mas_frecuente': 2, 'mensaje': 'Jugador player_2 obtuvo 3433 puntos'}, {'jugador': 'player_3', 'tiradas': 1000, 'frecuencias': {1: 162, 2: 182, 3: 175, 4: 173, 5: 146, 6: 162}, 'total': 3445, 'valor_mas_frecuente': 2, 'mensaje': 'Jugador player_3 obtuvo 3445 puntos'}, {'jugador': 'player_4', 'tiradas': 1000, 'frecuencias': {1: 157, 2: 178, 3: 156, 4: 172, 5: 174, 6: 163}, 'total': 3517, 'valor_mas_frecuente': 2, 'mensaje': 'Jugador player_4 obtuvo 3517 puntos'}], 'total_rondas': 1000, 'ganador': {'jugador': 'player_4', 'total': 3517}}
+Wrote profile results to 'CodigoSinRefactorizar.py.lprof'
+Timer unit: 1e-06 s
+
+Total time: 83.8818 s
+File: .\CodigoSinRefactorizar.py
+Function: simular_juego_sin_refactor at line 147
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+   147                                           @profile  # BAD SMELL: decorador aplicado directamente a función larga.
+   148                                           def simular_juego_sin_refactor(players: int, rondas: int) -> Dict[str, object]:
+   149                                                  """Ejecuta la simulación principal utilizando el código sin refactorizar."""
+   150         2          5.5      2.8      0.0         if players < 1 or players > 4:
+   151                                                          raise ValueError("El número de jugadores debe estar entre 1 y 4")
+   152         2          3.2      1.6      0.0         if rondas <= 0:
+   153                                                          raise ValueError("Las rondas deben ser mayores a cero")
+   154
+   155         2        592.9    296.4      0.0         _reiniciar_global(players)
+   156
+   157         2          3.1      1.6      0.0         if players >= 1:
+   158         2   20958788.6 1.05e+07     25.0                 GLOBAL_RESULTS["player_1"] = _simular_jugador1(rondas)
+   159         2          3.1      1.6      0.0         if players >= 2:
+   160         2   20999126.4 1.05e+07     25.0                 GLOBAL_RESULTS["player_2"] = _simular_jugador2(rondas)
+   161         2          2.6      1.3      0.0         if players >= 3:
+   162         2   20953220.6 1.05e+07     25.0                 GLOBAL_RESULTS["player_3"] = _simular_jugador3(rondas)
+   163         2          2.1      1.1      0.0         if players >= 4:
+   164         2   20969402.4 1.05e+07     25.0                 GLOBAL_RESULTS["player_4"] = _simular_jugador4(rondas)
+   165
+   166         2          2.1      1.1      0.0         estadisticas = []
+   167         2          1.8      0.9      0.0         if players >= 1:
+   168         2        249.1    124.6      0.0                 estadisticas.append(_estadisticas_individuales("player_1", GLOBAL_RESULTS["player_1"]))
+   169         2          1.5      0.8      0.0         if players >= 2:
+   170         2        114.7     57.4      0.0                 estadisticas.append(_estadisticas_individuales("player_2", GLOBAL_RESULTS["player_2"]))
+   171         2          1.1      0.6      0.0         if players >= 3:
+   172         2        106.5     53.2      0.0                 estadisticas.append(_estadisticas_individuales("player_3", GLOBAL_RESULTS["player_3"]))
+   173         2          1.2      0.6      0.0         if players >= 4:
+   174         2        114.5     57.2      0.0                 estadisticas.append(_estadisticas_individuales("player_4", GLOBAL_RESULTS["player_4"]))
+   175
+   176         2          1.2      0.6      0.0         try:  # BAD SMELL: captura genérica que oculta errores reales.
+   177         2          9.0      4.5      0.0                 guardar_en_cache({"jugadores": estadisticas, "rondas": rondas})
+   178                                                  except Exception:
+   179                                                          pass
+   180
+   181         2         17.1      8.6      0.0         ganador = _determinar_ganador(estadisticas)
+   182         2          1.5      0.8      0.0         resultado = {
+   183         2          1.1      0.6      0.0                 "jugadores": estadisticas,
+   184         2          1.1      0.6      0.0                 "total_rondas": rondas,
+   185         2          1.0      0.5      0.0                 "ganador": ganador,
+   186                                                  }
+   187         2          1.9      1.0      0.0         GLOBAL_LOG.append(resultado)  # BAD SMELL: crecimiento infinito de logs en memoria.
+   188         2          4.2      2.1      0.0         return resultado
+
+
+
+   CodigoRefactorizado:
+
+   PS C:\Users\Gsu\Documents\Parcial2PEF> py -m  kernprof -l -v .\CodigoRefactorizado.py
+{'total_rounds': 1000000, 'players': [{'player_id': 1, 'total_points': 3501932, 'frequencies': {1: 166617, 2: 166379, 3: 166771, 4: 165988, 5: 167178, 6: 167067}, 'most_common_value': 5}, {'player_id': 2, 'total_points': 3501552, 'frequencies': {1: 166346, 2: 166485, 3: 167211, 4: 166321, 5: 166503, 6: 167134}, 'most_common_value': 3}, {'player_id': 3, 'total_points': 3497923, 'frequencies': {1: 166959, 2: 167017, 3: 166373, 4: 166580, 5: 166935, 6: 166136}, 'most_common_value': 2}, {'player_id': 4, 'total_points': 3495899, 'frequencies': {1: 166830, 2: 167472, 3: 167010, 4: 166498, 5: 166037, 6: 166153}, 'most_common_value': 2}], 'winner': {'player_id': 1, 'total_points': 3501932}}
+Wrote profile results to 'CodigoRefactorizado.py.lprof'
+Timer unit: 1e-06 s
+
+Total time: 0.19532 s
+File: .\CodigoRefactorizado.py
+Function: simulate_dice_game at line 117
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+   117                                           @profile
+   118                                           def simulate_dice_game(
+   119                                                  num_players: int,
+   120                                                  num_rounds: int,
+   121                                                  *,
+   122                                                  batch_size: int = 100_000,
+   123                                                  seed: int | None = None,
+   124                                           ) -> GameStatistics:
+   125                                                  """Simula un juego de dados vectorizado usando lotes.
+   126
+   127                                                  Refactorización: Introduce Batch Processing + Vectorization.
+   128
+   129                                                  Args:
+   130                                                          num_players: Número de jugadores a simular.
+   131                                                          num_rounds: Cantidad de rondas que ejecutará cada jugador.
+   132                                                          batch_size: Tamaño máximo del bloque procesado en cada iteración.
+   133                                                          seed: Semilla opcional para reproducibilidad.
+   134
+   135                                                  Returns:
+   136                                                          Instancia `GameStatistics` con los resultados consolidados.
+   137                                                  """
+   138
+   139         1         15.2     15.2      0.0         _validate_inputs(num_players, num_rounds, batch_size)
+   140
+   141         1      31705.4  31705.4     16.2         rng = np.random.default_rng(seed)
+   142         1          2.9      2.9      0.0         totals = np.zeros(num_players, dtype=np.int64)
+   143         1          5.9      5.9      0.0         frequencies = np.zeros((num_players, 6), dtype=np.int64)
+   144
+   145         1          0.7      0.7      0.0         rounds_remaining = num_rounds
+   146        11         54.3      4.9      0.0         while rounds_remaining > 0:
+   147        10         61.2      6.1      0.0                 current_batch = min(batch_size, rounds_remaining)
+   148        10      17826.0   1782.6      9.1                 rolls = rng.integers(1, 7, size=(current_batch, num_players), endpoint=False)
+   149        10      13059.6   1306.0      6.7                 totals += rolls.sum(axis=0)
+   150        10     132085.4  13208.5     67.6                 batch_frequencies = (rolls[..., None] == FACES).sum(axis=0)
+   151        10        185.9     18.6      0.1                 frequencies += batch_frequencies  # Refactorización: Replace Loop with Vectorized Operation.        
+   152        10         37.6      3.8      0.0                 rounds_remaining -= current_batch
+   153
+   154         1        251.9    251.9      0.1         player_stats = _build_player_stats(totals, frequencies)
+   155
+   156         1         15.4     15.4      0.0         winner = max(player_stats, key=lambda p: p.total_points)
+   157         1         12.2     12.2      0.0         return GameStatistics(total_rounds=num_rounds, players=player_stats, winner=winner)
+
+
+
+
+   Mejoras observadas:
+    - Tiempo total reducido de ~84 segundos a ~0.2 segundos.
+    - Uso de procesamiento por lotes y operaciones vectorizadas con NumPy.
+    - Código más limpio y mantenible con funciones pequeñas y específicas.
+    - Validación de entradas y manejo de errores mejorados.
+    - Eliminación de efectos secundarios y crecimiento infinito de logs en memoria.
