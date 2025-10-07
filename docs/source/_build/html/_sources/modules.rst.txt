@@ -6,4 +6,3 @@ Módulos
 
    CodigoRefactorizado
    CodigoSinRefactorizar
-   ImplementacionRefactorizadoStreamlit
