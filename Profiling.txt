@@ -1,193 +1,105 @@
----
+PARCIAL 2 – Simulación de un Juego de Dados
 
-Explicación práctica de cada punto
-==================================
+🔹 Proyecto 7 – Simulación de un Juego de Dados  - Jesus Olariaga - Lopez
+Crear un simulador de tiradas de dados para 1 a 4 jugadores.
+Guardar estadísticas: número de tiradas, valores más frecuentes, ganador.
+Versión inicial con funciones repetidas y mala estructura → refactorizar.
+Usar batching para simular millones de tiradas en bloques.
+Medir rendimiento con timeit y cProfile.
+Usar line_profiler para ver qué partes del código se ejecutan más.
+Implementar tests que verifiquen:
+Que las tiradas estén siempre entre 1 y 6.
+Que la suma de probabilidades se aproxime a la esperada.
+---------------------------------------------------------------------------------------------
+   Informe del Proyecto 7 – Simulación de un Juego de Dados
 
-1. **Simulador de tiradas de dados para 1 a 4 jugadores**
-    - En la versión inicial, se crean funciones duplicadas para cada jugador:
-       ```python
-       def _simular_jugador1(rondas):
-             resultados = []
-             for _ in range(rondas):
-                   resultados.append(_tirada_lenta())
-             return resultados
-       # ...igual para jugador2, jugador3, jugador4
-       ```
-    - En la versión refactorizada, se usa NumPy para simular todos los jugadores en bloque:
-       ```python
-       rolls = rng.integers(1, 7, size=(current_batch, num_players), endpoint=False)
-       ```
+Autor: Jesús Olariaga – López
+Archivo: Informe_Proyecto7.txt
 
-2. **Guardar estadísticas: número de tiradas, valores más frecuentes, ganador**
-    - Se usan diccionarios y `Counter` para contar frecuencias:
-       ```python
-       contador = Counter(tiradas)
-       mas_frecuente = max(contador.items(), key=lambda x: (x[1], x[0]))[0]
-       ```
-    - En la versión refactorizada, se encapsula en dataclasses:
-       ```python
-       @dataclass
-       class PlayerStats:
-             player_id: int
-             total_points: int
-             frequencies: Dict[int, int]
-             most_common_value: int
-       ```
+1) VERIFICACIÓN DE CUMPLIMIENTO DE LA CONSIGNA
+- Simulador para 1 a 4 jugadores: OK. Ambas versiones validan límites y soportan de 1 a 4 jugadores.
+- Estadísticas por jugador: OK. Se guarda número de tiradas, frecuencias por cara (1..6), total de puntos y valor más frecuente.
+- Determinación de ganador: OK. Se elige el jugador con mayor puntaje total.
+- Versión inicial con funciones repetidas y mala estructura: OK. Presenta duplicación, estado global y acoplamiento (ver sección 3).
+- Refactorización completa: OK. Se reemplazan bucles y estado global por vectorización, clases de datos y funciones puras.
+- Batching para millones de tiradas: OK. Se procesa en bloques configurables (batch_size) y se valida rendimiento a 1.000.000 de rondas.
+- Medición de rendimiento: OK. Se incluyen timeit y cProfile en ambas versiones.
+- line_profiler (kernprof): OK. Ambas versiones exponen funciones decoradas con @profile para inspección.
+- Tests estadísticos: OK. Se verifica que todas las tiradas están en [1..6] y que la suma de probabilidades ~ 1.0.
 
-3. **Versión inicial con funciones repetidas y mala estructura → refactorizar**
-    - El código inicial tiene funciones casi idénticas y estado global:
-       ```python
-       GLOBAL_RESULTS = {}
-       def _reiniciar_global(players):
-             # ...
-       ```
-    - El refactor elimina duplicaciones y usa funciones puras y objetos:
-       ```python
-       def _build_player_stats(...):
-             # ...
-       ```
+2) ¿CÓMO SE IMPLEMENTÓ CADA PUNTO?
+2.1. Simulación de 1 a 4 jugadores
+- Sin refactor: funciones por jugador con lógica duplicada (_simular_jugador1..4) y validaciones de límites.
+- Refactor: una sola simulación vectorizada con NumPy que genera todas las tiradas por lote y jugador en una matriz.
 
-4. **Usar batching para simular millones de tiradas en bloques**
-    - Inicialmente, se simulan lotes con bucles manuales:
-       ```python
-       while rondas_pendientes > 0:
-             resultado = simular_juego_sin_refactor(players, tamanio)
-             # ...
-       ```
-    - Refactorizado con NumPy:
-       ```python
-       while rounds_remaining > 0:
-             rolls = rng.integers(1, 7, size=(current_batch, num_players), endpoint=False)
-             # ...
-       ```
+2.2. Estadísticas y ganador
+- Sin refactor: cálculo con Counter para frecuencias, total, valor más frecuente y un mensaje por jugador; ganador por máximo total.
+- Refactor: se encapsula en dataclasses PlayerStats y GameStatistics; se calcula most_common_value por argmax y winner por máximo de total_points.
 
-5. **Medir rendimiento con timeit y cProfile**
-    - Se usa `timeit` para medir tiempos:
-       ```python
-       temporizador = timeit.Timer(lambda: simular_juego_sin_refactor(players, rondas))
-       resultados = temporizador.repeat(...)
-       ```
-    - Se usa `cProfile` para analizar funciones más lentas:
-       ```python
-       profiler = cProfile.Profile()
-       profiler.enable()
-       simular_juego_sin_refactor(...)
-       profiler.disable()
-       ```
+2.3. Batching (millones de tiradas)
+- Sin refactor: versión de batching ineficiente que re‑ejecuta la simulación por bloques y concatena resultados.
+- Refactor: procesamiento por lotes con tamaño configurable (por defecto 100.000), acumulando totales y frecuencias de forma vectorizada.
 
-6. **Usar line_profiler para ver qué partes del código se ejecutan más**
-    - Se marca funciones con `@profile` y se ejecuta con `kernprof`:
-       ```python
-       @profile
-       def simular_juego_sin_refactor(...):
-             # ...
-       ```
+2.4. Medición de rendimiento
+- cProfile: funciones dedicadas que capturan y ordenan por tiempo acumulado.
+- timeit: funciones/flags para repetir mediciones y obtener lista de duraciones.
+- line_profiler: uso de @profile y ejecución con “kernprof -l -v”.
 
-7. **Implementar tests que verifiquen: tiradas entre 1 y 6, suma de probabilidades ≈ esperada**
-    - En ambos módulos, se usan pruebas unitarias:
-       ```python
-       class TestSimuladorSinRefactor(unittest.TestCase):
-             def test_tirada_en_rango(self):
-                   self.assertGreaterEqual(valor, 1)
-                   self.assertLessEqual(valor, 6)
-             def test_probabilidades_sumadas(self):
-                   self.assertAlmostEqual(sum(probabilidades), 1.0, delta=0.05)
-       ```
-       ```python
-       class DiceGameTests(unittest.TestCase):
-             def test_rolls_within_range(self):
-                   # ...
-             def test_probability_sum_is_one(self):
-                   # ...
-       ```
+2.5. Tests de corrección estadística
+- Rango de tiradas: se comprueba que las caras están siempre entre 1 y 6.
+- Probabilidades: se evalúa que la distribución empírica por jugador suma ≈ 1 (tolerancia razonable).
 
-8. **Interfaz interactiva y visualización**
-    - Se usa Streamlit para mostrar el juego y el simulador batch:
-       ```python
-       import streamlit as st
-       def _render_game_view():
-             st.title("Juego de Dados Multijugador")
-             # ...
-       def _render_simulator_view():
-             st.title("Simulador en Batches")
-             # ...
-       ```
----
+3) BAD SMELLS EN LA VERSIÓN SIN REFACTORIZAR Y TÉCNICAS DE REFACTORIZACIÓN
+- Código duplicado: cuatro funciones casi idénticas para jugadores 1..4 → “Replace Method with Parameter” + vectorización en simulate_dice_game.
+- Estado global compartido (GLOBAL_RESULTS, GLOBAL_LOG, GLOBAL_CONFIG) y efectos laterales → “Encapsulate Collection”, “Replace Global with Return Value / Objects” usando GameStatistics/PlayerStats.
+- Latencia artificial (time.sleep(0.01)) en cada tirada → eliminar latencia y reemplazar por generador vectorizado de enteros con NumPy.
+-(puaj) Argumento mutable por defecto en guardar_en_cache → corrección implícita al eliminar ese flujo en la versión refactorizada y evitar mutaciones compartidas.
+- Lógica de presentación mezclada con cálculo (mensajes y prints acoplados) → separar dominio (estadísticas y ganador) de la capa CLI (main).
+- Manejo de excepciones genéricas (try/except vacío) que oculta errores → validaciones explícitas de parámetros y eliminación de capturas silenciosas.
+- Pruebas en el mismo archivo que la implementación → mantener tests pero estructurar clases de prueba independientes y reutilizar API estable (simulate_dice_game, simulate_probabilities).
+- Batching ineficiente que re‑invoca la simulación completa y concatena → batching real con acumulación de totales y frecuencias por lote.
+- Importaciones/constantes no usadas (math, Optional, TEXTO_FORMATO trivial) → limpiar dependencias en la versión refactorizada.
 
-Resumen de técnicas y librerías utilizadas
-==========================================
+Técnicas aplicadas (mapeo):
+- Extract Function / Extract Factory Method → _build_player_stats y PlayerStats.from_arrays
+- Encapsulate Collection → GameStatistics / PlayerStats con métodos claros
+- Replace Loop with Vectorized Operation → conteo de frecuencias y sumas con NumPy
+- Introduce Parameter Validation → _validate_inputs para límites de jugadores, rondas y batch
+- Preserve Whole Object → benchmark/profiling reutilizan la misma función de simulación
+- Replace Data with Object → distribuciones y resultados via objetos en lugar de dicts mixtos
 
-1. **Simulador de tiradas de dados para 1 a 4 jugadores**
-   - Técnicas: Algoritmos iterativos (versión inicial), vectorización y procesamiento por lotes (refactorizado).
-   - Librerías: `random` (sin refactorizar), `numpy` (refactorizado), manejo de listas y diccionarios.
+4) RESULTADOS DE RENDIMIENTO (valores provistos + cálculos de mejora)
+4.1. kernprof (line_profiler)
+- Sin refactor (función simular_juego_sin_refactor): 83.88180 s
+- Refactor (simulate_dice_game): 0.19532 s
+- Mejora ≈ ×429.46
 
-2. **Guardar estadísticas: número de tiradas, valores más frecuentes, ganador**
-   - Técnicas: Uso de `collections.Counter`, agregación de resultados, encapsulamiento en dataclasses (`PlayerStats`, `GameStatistics`).
-   - Librerías: `collections`, `dataclasses` (refactorizado), estructuras estándar de Python.
+4.2. cProfile
+- Sin refactor: 41.805 s (dominado por time.sleep en _tirada_lenta).
+- Refactor: 0.172 s
+- Mejora ≈ ×243.05
 
-3. **Versión inicial con funciones repetidas y mala estructura → refactorizar**
-   - Técnicas: Duplicación de funciones, estado global, refactorización hacia funciones puras y objetos.
-   - Librerías: Python estándar, `dataclasses`, `numpy`.
+4.3. timeit (promedios de 3 corridas)
+- Sin refactor: 41.780 s  (corridas: 41.956, 41.755, 41.631)
+- Refactor: 0.168 s  (corridas: 0.178, 0.166, 0.159)
+- Mejora ≈ ×249.07
 
-4. **Usar batching para simular millones de tiradas en bloques**
-   - Técnicas: Procesamiento por lotes con bucles y luego con arrays NumPy.
-   - Librerías: `numpy`, slicing y operaciones vectorizadas.
+Observación clave: en la versión sin refactor, el cuello de botella es la espera artificial de 10 ms por tirada, lo que explica que time.sleep concentre casi todo el tiempo de CPU. La versión refactorizada elimina esa latencia y utiliza vectorización, logrando mejoras de entre ×243 y ×429 según herramienta.
 
-5. **Medir rendimiento con timeit y cProfile**
-   - Técnicas: Benchmarking con `timeit.Timer`, profiling con `cProfile.Profile` y `pstats.Stats`.
-   - Librerías: `timeit`, `cProfile`, `pstats`.
+5) COMANDOS ÚTILES (usados/esperados)
+- line_profiler:   py -m kernprof -l -v .\CodigoSinRefactorizar.py
+                   py -m kernprof -l -v .\CodigoRefactorizado.py
+- cProfile (flag): python .\CodigoSinRefactorizar.py --profile
+                   python .\CodigoRefactorizado.py --profile
+- timeit (flag):   python .\CodigoSinRefactorizar.py --timeit
+                   python .\CodigoRefactorizado.py --timeit
+- tests:           python .\CodigoSinRefactorizar.py --run-tests
+                   python .\CodigoRefactorizado.py   --run-tests
 
-6. **Usar line_profiler para ver qué partes del código se ejecutan más**
-   - Técnicas: Decorador `@profile` para marcar funciones, análisis con `kernprof` y visualización de tiempos por línea.
-   - Librerías: `line_profiler`, `kernprof`.
-
-7. **Implementar tests que verifiquen: tiradas entre 1 y 6, suma de probabilidades ≈ esperada**
-   - Técnicas: Pruebas unitarias con `unittest`, aserciones sobre rangos y sumas de probabilidades.
-   - Librerías: `unittest`, `random`, `numpy`.
-
-8. **Interfaz interactiva y visualización**
-   - Técnicas: Animación ASCII, visualización de resultados, interacción por lotes y manual.
-   - Librerías: `streamlit`, helpers de visualización, integración con módulos refactorizados.
-
-Análisis de bad smells y refactorización
-========================================
-
-En `CodigoSinRefactorizar.py` se detectaron varios bad smells:
-
-- **Duplicación de código:** funciones casi idénticas para cada jugador (`_simular_jugador1`, `_simular_jugador2`, ...).
-- **Estado global compartido:** uso de variables globales (`GLOBAL_RESULTS`, `GLOBAL_LOG`) que complican el seguimiento y generan efectos secundarios.
-- **Latencia artificial:** uso de `time.sleep(0.01)` en cada tirada, ralentizando la simulación de forma innecesaria.
-- **Acumulación infinita:** logs y resultados que crecen sin control.
-- **Falta de encapsulamiento:** mezcla de lógica de presentación y cálculo, argumentos mutables por defecto, y validaciones dispersas.
-
-Refactorización en `CodigoRefactorizado.py`:
-
-- **Eliminación de duplicación:** se reemplazaron las funciones repetidas por procesamiento vectorizado con NumPy, simulando todos los jugadores en un solo bloque:
-   ```python
-   rolls = rng.integers(1, 7, size=(current_batch, num_players), endpoint=False)
-   ```
-- **Encapsulamiento y estado local:** se usaron dataclasses (`PlayerStats`, `GameStatistics`) para agrupar estadísticas y resultados, evitando variables globales.
-- **Batching eficiente:** se implementó procesamiento por lotes, permitiendo simular millones de tiradas en bloques grandes y rápidos.
-- **Eliminación de latencia artificial:** se quitó `time.sleep`, acelerando la simulación más de 400 000×.
-- **Validación centralizada:** se agregaron funciones de validación de parámetros y manejo explícito de errores.
-- **Pruebas unitarias robustas:** se migraron los tests a clases `unittest` independientes, verificando rangos y sumas de probabilidades.
-
-Técnicas utilizadas:
-- Vectorización con NumPy
-- Encapsulamiento con dataclasses
-- Procesamiento por lotes (batching)
-- Refactorización de funciones y separación de responsabilidades
-- Validación y manejo de errores
-- Pruebas unitarias
-
-El bloque siguiente mantiene el detalle crudo de las ejecuciones (salidas de `kernprof`, `cProfile` y `timeit`). Las conclusiones resumidas permiten consultarlas sin recorrer todas las trazas.
-
-## Resumen ejecutivo
-
-- La versión sin refactorizar tarda ~84 s en 1 000 rondas y está dominada por `time.sleep`.
-- La versión refactorizada ejecuta 1 000 000 de rondas en ~0.2 s gracias a NumPy vectorizado.
-- Las mejoras clave provienen de eliminar duplicaciones, estado global y retardos artificiales.
-
+6) CONCLUSIÓN
+La refactorización cumple la consigna y mejora drásticamente el rendimiento gracias a: (a) eliminación de latencia artificial; (b) generación vectorizada de tiradas; (c) acumulación por lotes; (d) encapsulación del modelo de dominio en dataclasses y validaciones de parámetros; (e) API estable que facilita testing y medición.
+---------------------------------------------------------------------------------------------
+   Resultados de profiling
 ---
 
 CodigoSinRefactorizar: 
