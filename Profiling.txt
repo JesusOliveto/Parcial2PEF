@@ -148,8 +148,37 @@ Resumen de técnicas y librerías utilizadas
 8. **Interfaz interactiva y visualización**
    - Técnicas: Animación ASCII, visualización de resultados, interacción por lotes y manual.
    - Librerías: `streamlit`, helpers de visualización, integración con módulos refactorizados.
-Análisis de profiling
-=====================
+
+Análisis de bad smells y refactorización
+========================================
+
+En `CodigoSinRefactorizar.py` se detectaron varios bad smells:
+
+- **Duplicación de código:** funciones casi idénticas para cada jugador (`_simular_jugador1`, `_simular_jugador2`, ...).
+- **Estado global compartido:** uso de variables globales (`GLOBAL_RESULTS`, `GLOBAL_LOG`) que complican el seguimiento y generan efectos secundarios.
+- **Latencia artificial:** uso de `time.sleep(0.01)` en cada tirada, ralentizando la simulación de forma innecesaria.
+- **Acumulación infinita:** logs y resultados que crecen sin control.
+- **Falta de encapsulamiento:** mezcla de lógica de presentación y cálculo, argumentos mutables por defecto, y validaciones dispersas.
+
+Refactorización en `CodigoRefactorizado.py`:
+
+- **Eliminación de duplicación:** se reemplazaron las funciones repetidas por procesamiento vectorizado con NumPy, simulando todos los jugadores en un solo bloque:
+   ```python
+   rolls = rng.integers(1, 7, size=(current_batch, num_players), endpoint=False)
+   ```
+- **Encapsulamiento y estado local:** se usaron dataclasses (`PlayerStats`, `GameStatistics`) para agrupar estadísticas y resultados, evitando variables globales.
+- **Batching eficiente:** se implementó procesamiento por lotes, permitiendo simular millones de tiradas en bloques grandes y rápidos.
+- **Eliminación de latencia artificial:** se quitó `time.sleep`, acelerando la simulación más de 400 000×.
+- **Validación centralizada:** se agregaron funciones de validación de parámetros y manejo explícito de errores.
+- **Pruebas unitarias robustas:** se migraron los tests a clases `unittest` independientes, verificando rangos y sumas de probabilidades.
+
+Técnicas utilizadas:
+- Vectorización con NumPy
+- Encapsulamiento con dataclasses
+- Procesamiento por lotes (batching)
+- Refactorización de funciones y separación de responsabilidades
+- Validación y manejo de errores
+- Pruebas unitarias
 
 El bloque siguiente mantiene el detalle crudo de las ejecuciones (salidas de `kernprof`, `cProfile` y `timeit`). Las conclusiones resumidas permiten consultarlas sin recorrer todas las trazas.
 

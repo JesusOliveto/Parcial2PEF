@@ -1,0 +1,438 @@
+PROYECTO 7 – Simulación de un Juego de Dados
+Autor: Jesús Olariaga – López
+Archivo: Informe_Proyecto7.txt
+
+1) VERIFICACIÓN DE CUMPLIMIENTO DE LA CONSIGNA
+- Simulador para 1 a 4 jugadores: OK. Ambas versiones validan límites y soportan de 1 a 4 jugadores.
+- Estadísticas por jugador: OK. Se guarda número de tiradas, frecuencias por cara (1..6), total de puntos y valor más frecuente.
+- Determinación de ganador: OK. Se elige el jugador con mayor puntaje total.
+- Versión inicial con funciones repetidas y mala estructura: OK. Presenta duplicación, estado global y acoplamiento (ver sección 3).
+- Refactorización completa: OK. Se reemplazan bucles y estado global por vectorización, clases de datos y funciones puras.
+- Batching para millones de tiradas: OK. Se procesa en bloques configurables (batch_size) y se valida rendimiento a 1.000.000 de rondas.
+- Medición de rendimiento: OK. Se incluyen timeit y cProfile en ambas versiones.
+- line_profiler (kernprof): OK. Ambas versiones exponen funciones decoradas con @profile para inspección.
+- Tests estadísticos: OK. Se verifica que todas las tiradas están en [1..6] y que la suma de probabilidades ~ 1.0.
+
+2) ¿CÓMO SE IMPLEMENTÓ CADA PUNTO?
+2.1. Simulación de 1 a 4 jugadores
+- Sin refactor: funciones por jugador con lógica duplicada (_simular_jugador1..4) y validaciones de límites.
+- Refactor: una sola simulación vectorizada con NumPy que genera todas las tiradas por lote y jugador en una matriz.
+
+2.2. Estadísticas y ganador
+- Sin refactor: cálculo con Counter para frecuencias, total, valor más frecuente y un mensaje por jugador; ganador por máximo total.
+- Refactor: se encapsula en dataclasses PlayerStats y GameStatistics; se calcula most_common_value por argmax y winner por máximo de total_points.
+
+2.3. Batching (millones de tiradas)
+- Sin refactor: versión de batching ineficiente que re‑ejecuta la simulación por bloques y concatena resultados.
+- Refactor: procesamiento por lotes con tamaño configurable (por defecto 100.000), acumulando totales y frecuencias de forma vectorizada.
+
+2.4. Medición de rendimiento
+- cProfile: funciones dedicadas que capturan y ordenan por tiempo acumulado.
+- timeit: funciones/flags para repetir mediciones y obtener lista de duraciones.
+- line_profiler: uso de @profile y ejecución con “kernprof -l -v”.
+
+2.5. Tests de corrección estadística
+- Rango de tiradas: se comprueba que las caras están siempre entre 1 y 6.
+- Probabilidades: se evalúa que la distribución empírica por jugador suma ≈ 1 (tolerancia razonable).
+
+3) BAD SMELLS EN LA VERSIÓN SIN REFACTORIZAR Y TÉCNICAS DE REFACTORIZACIÓN
+- Código duplicado: cuatro funciones casi idénticas para jugadores 1..4 → “Replace Method with Parameter” + vectorización en simulate_dice_game.
+- Estado global compartido (GLOBAL_RESULTS, GLOBAL_LOG, GLOBAL_CONFIG) y efectos laterales → “Encapsulate Collection”, “Replace Global with Return Value / Objects” usando GameStatistics/PlayerStats.
+- Latencia artificial (time.sleep(0.01)) en cada tirada → eliminar latencia y reemplazar por generador vectorizado de enteros con NumPy.
+- Argumento mutable por defecto en guardar_en_cache → corrección implícita al eliminar ese flujo en la versión refactorizada y evitar mutaciones compartidas.
+- Lógica de presentación mezclada con cálculo (mensajes y prints acoplados) → separar dominio (estadísticas y ganador) de la capa CLI (main).
+- Manejo de excepciones genéricas (try/except vacío) que oculta errores → validaciones explícitas de parámetros y eliminación de capturas silenciosas.
+- Pruebas en el mismo archivo que la implementación → mantener tests pero estructurar clases de prueba independientes y reutilizar API estable (simulate_dice_game, simulate_probabilities).
+- Batching ineficiente que re‑invoca la simulación completa y concatena → batching real con acumulación de totales y frecuencias por lote.
+- Importaciones/constantes no usadas (math, Optional, TEXTO_FORMATO trivial) → limpiar dependencias en la versión refactorizada.
+
+Técnicas aplicadas (mapeo):
+- Extract Function / Extract Factory Method → _build_player_stats y PlayerStats.from_arrays
+- Encapsulate Collection → GameStatistics / PlayerStats con métodos claros
+- Replace Loop with Vectorized Operation → conteo de frecuencias y sumas con NumPy
+- Introduce Parameter Validation → _validate_inputs para límites de jugadores, rondas y batch
+- Preserve Whole Object → benchmark/profiling reutilizan la misma función de simulación
+- Replace Data with Object → distribuciones y resultados via objetos en lugar de dicts mixtos
+
+4) RESULTADOS DE RENDIMIENTO (valores provistos + cálculos de mejora)
+4.1. kernprof (line_profiler)
+- Sin refactor (función simular_juego_sin_refactor): 83.88180 s
+- Refactor (simulate_dice_game): 0.19532 s
+- Mejora ≈ ×429.46
+
+4.2. cProfile
+- Sin refactor: 41.805 s (dominado por time.sleep en _tirada_lenta).
+- Refactor: 0.172 s
+- Mejora ≈ ×243.05
+
+4.3. timeit (promedios de 3 corridas)
+- Sin refactor: 41.780 s  (corridas: 41.956, 41.755, 41.631)
+- Refactor: 0.168 s  (corridas: 0.178, 0.166, 0.159)
+- Mejora ≈ ×249.07
+
+Observación clave: en la versión sin refactor, el cuello de botella es la espera artificial de 10 ms por tirada, lo que explica que time.sleep concentre casi todo el tiempo de CPU. La versión refactorizada elimina esa latencia y utiliza vectorización, logrando mejoras de entre ×243 y ×429 según herramienta.
+
+5) COMANDOS ÚTILES (usados/esperados)
+- line_profiler:   py -m kernprof -l -v .\CodigoSinRefactorizar.py
+                   py -m kernprof -l -v .\CodigoRefactorizado.py
+- cProfile (flag): python .\CodigoSinRefactorizar.py --profile
+                   python .\CodigoRefactorizado.py --profile
+- timeit (flag):   python .\CodigoSinRefactorizar.py --timeit
+                   python .\CodigoRefactorizado.py --timeit
+- tests:           python .\CodigoSinRefactorizar.py --run-tests
+                   python .\CodigoRefactorizado.py   --run-tests
+
+6) CONCLUSIÓN
+La refactorización cumple la consigna y mejora drásticamente el rendimiento gracias a: (a) eliminación de latencia artificial; (b) generación vectorizada de tiradas; (c) acumulación por lotes; (d) encapsulación del modelo de dominio en dataclasses y validaciones de parámetros; (e) API estable que facilita testing y medición.
+
+
+7) FRAGMENTOS CLAVE DEL CÓDIGO (EXTRAÍDOS)
+
+
+7.x) Código SIN refactorizar (puntos problemáticos)
+
+>>> Globals (estado compartido)
+
+```
+   26: try:  # pragma: no cover - este bloque sólo se ejecuta si falta line_profiler
+   27: 	profile  # type: ignore[name-defined]
+   28: except NameError:  # pragma: no cover
+   29: 	def profile(func):  # type: ignore
+   30: 		return func
+   31: 
+   32: 
+   33: # BAD SMELL: estado global compartido sin encapsulación.
+   34: GLOBAL_RESULTS: Dict[str, List[int]] = {}
+   35: GLOBAL_CONFIG = {"ultima_simulacion": None}
+   36: GLOBAL_LOG = []  # BAD SMELL: colección global que nunca se limpia.
+   37: VALORES_POSIBLES = [1, 2, 3, 4, 5, 6]
+   38: TEXTO_FORMATO = "{}"  # BAD SMELL: constante inútil.
+   39: 
+   40: 
+   41: def _reiniciar_global(players: int) -> None:
+   42: 	"""Reinicia el estado global para cada jugador."""
+```
+
+>>> Función lenta con sleep
+
+```
+   58: def _tirada_lenta() -> int:
+   59: 	"""Genera una tirada lenta a propósito."""
+   60: 
+   61: 	# BAD SMELL: latencia artificial fija (número mágico) que arruina el rendimiento real.
+   62: 	time.sleep(0.01)
+   63: 	return random.choice(VALORES_POSIBLES)
+   64: 
+   65: 
+   66: # BAD SMELL: comentario sin espacio y redundante, evidencia de poco cuidado.
+   67: #Funciones de simulación para cada jugador (código duplicado).
+   68: 
+```
+
+>>> Funciones duplicadas por jugador
+
+```
+   69: def _simular_jugador1(rondas: int) -> List[int]:  # BAD SMELL: duplicación de código.
+   70: 	"""Simula las tiradas del jugador 1 con lógica repetida."""
+   71: 	resultados = []
+   72: 	for _ in range(rondas):
+   73: 		resultados.append(_tirada_lenta())
+   74: 	return resultados
+   75: 
+   76: 
+```
+
+>>> Funciones duplicadas por jugador (2)
+
+```
+   77: def _simular_jugador2(rondas: int) -> List[int]:  # BAD SMELL: más duplicación.
+   78: 	"""Simula las tiradas del jugador 2 repitiendo el mismo algoritmo."""
+   79: 	resultados = []
+   80: 	for _ in range(rondas):
+   81: 		resultados.append(_tirada_lenta())
+   82: 	return resultados
+   83: 
+   84: 
+```
+
+>>> Try/Except genérico que silencia errores
+
+```
+  217: 		estadisticas.append(_estadisticas_individuales("player_1", GLOBAL_RESULTS.get("player_1", [])))
+  218: 	if players >= 2:
+  219: 		estadisticas.append(_estadisticas_individuales("player_2", GLOBAL_RESULTS.get("player_2", [])))
+  220: 	if players >= 3:
+  221: 		estadisticas.append(_estadisticas_individuales("player_3", GLOBAL_RESULTS.get("player_3", [])))
+  222: 	if players >= 4:
+  223: 		estadisticas.append(_estadisticas_individuales("player_4", GLOBAL_RESULTS.get("player_4", [])))
+  224: 
+  225: 	try:
+  226: 		guardar_en_cache({"batch": True, "jugadores": estadisticas})
+  227: 	except Exception:
+  228: 		pass
+  229: 
+  230: 	ganador = _determinar_ganador(estadisticas)
+  231: 	return {
+  232: 		"jugadores": estadisticas,
+  233: 		"total_rondas": rondas,
+  234: 		"ganador": ganador,
+  235: 	}
+  236: 
+```
+
+>>> Función principal con @profile
+
+```
+  148: def simular_juego_sin_refactor(players: int, rondas: int) -> Dict[str, object]:
+  149: 	"""Ejecuta la simulación principal utilizando el código sin refactorizar."""
+  150: 	if players < 1 or players > 4:
+  151: 		raise ValueError("El número de jugadores debe estar entre 1 y 4")
+  152: 	if rondas <= 0:
+  153: 		raise ValueError("Las rondas deben ser mayores a cero")
+  154: 
+  155: 	_reiniciar_global(players)
+  156: 
+  157: 	if players >= 1:
+  158: 		GLOBAL_RESULTS["player_1"] = _simular_jugador1(rondas)
+  159: 	if players >= 2:
+  160: 		GLOBAL_RESULTS["player_2"] = _simular_jugador2(rondas)
+  161: 	if players >= 3:
+  162: 		GLOBAL_RESULTS["player_3"] = _simular_jugador3(rondas)
+  163: 	if players >= 4:
+  164: 		GLOBAL_RESULTS["player_4"] = _simular_jugador4(rondas)
+  165: 
+  166: 	estadisticas = []
+  167: 	if players >= 1:
+  168: 		estadisticas.append(_estadisticas_individuales("player_1", GLOBAL_RESULTS["player_1"]))
+  169: 	if players >= 2:
+  170: 		estadisticas.append(_estadisticas_individuales("player_2", GLOBAL_RESULTS["player_2"]))
+  171: 	if players >= 3:
+  172: 		estadisticas.append(_estadisticas_individuales("player_3", GLOBAL_RESULTS["player_3"]))
+  173: 	if players >= 4:
+  174: 		estadisticas.append(_estadisticas_individuales("player_4", GLOBAL_RESULTS["player_4"]))
+  175: 
+  176: 	try:  # BAD SMELL: captura genérica que oculta errores reales.
+  177: 		guardar_en_cache({"jugadores": estadisticas, "rondas": rondas})
+  178: 	except Exception:
+  179: 		pass
+  180: 
+  181: 	ganador = _determinar_ganador(estadisticas)
+  182: 	resultado = {
+  183: 		"jugadores": estadisticas,
+  184: 		"total_rondas": rondas,
+  185: 		"ganador": ganador,
+  186: 	}
+  187: 	GLOBAL_LOG.append(resultado)  # BAD SMELL: crecimiento infinito de logs en memoria.
+  188: 	return resultado
+  189: 
+  190: 
+```
+
+>>> Batching ineficiente
+
+```
+  191: def simular_en_batches_sin_refactor(players: int, rondas: int, batch_size: int = 1000) -> Dict[str, object]:
+  192: 	"""Aplica la versión ineficiente de batching acumulando tiradas manualmente."""
+  193: 	if batch_size <= 0:
+  194: 		raise ValueError("El tamaño de lote debe ser mayor a cero")
+  195: 
+  196: 	_reiniciar_global(players)
+  197: 	acumulado: Dict[str, List[int]] = {clave: [] for clave in GLOBAL_RESULTS.keys()}
+  198: 	rondas_pendientes = rondas
+  199: 	while rondas_pendientes > 0:
+  200: 		tamanio = batch_size
+  201: 		if rondas_pendientes < batch_size:
+  202: 			tamanio = rondas_pendientes
+  203: 
+  204: 		resultado = simular_juego_sin_refactor(players, tamanio)
+  205: 		for jugador in resultado["jugadores"]:
+  206: 			nombre = jugador["jugador"]
+  207: 			acumulado.setdefault(nombre, [])
+  208: 			acumulado[nombre].extend([int(valor) for valor in jugador["frecuencias"].keys() for _ in range(jugador["frecuencias"][valor])])
+  209: 
+  210: 		rondas_pendientes -= tamanio
+  211: 
+  212: 	for nombre, valores in acumulado.items():
+  213: 		GLOBAL_RESULTS[nombre] = valores
+  214: 
+  215: 	estadisticas = []  # BAD SMELL: acumulador mutable pasado por referencia.
+  216: 	if players >= 1:
+  217: 		estadisticas.append(_estadisticas_individuales("player_1", GLOBAL_RESULTS.get("player_1", [])))
+  218: 	if players >= 2:
+  219: 		estadisticas.append(_estadisticas_individuales("player_2", GLOBAL_RESULTS.get("player_2", [])))
+  220: 	if players >= 3:
+  221: 		estadisticas.append(_estadisticas_individuales("player_3", GLOBAL_RESULTS.get("player_3", [])))
+  222: 	if players >= 4:
+  223: 		estadisticas.append(_estadisticas_individuales("player_4", GLOBAL_RESULTS.get("player_4", [])))
+  224: 
+  225: 	try:
+  226: 		guardar_en_cache({"batch": True, "jugadores": estadisticas})
+  227: 	except Exception:
+  228: 		pass
+  229: 
+  230: 	ganador = _determinar_ganador(estadisticas)
+  231: 	return {
+  232: 		"jugadores": estadisticas,
+  233: 		"total_rondas": rondas,
+  234: 		"ganador": ganador,
+  235: 	}
+  236: 
+  237: 
+```
+
+>>> Tests: rango [1..6] y suma ~1
+
+```
+   14: import io
+   15: import math  # BAD SMELL: import sobrante que nunca se usa.
+   16: import random
+   17: import time
+   18: import timeit
+   19: import pstats
+   20: from collections import Counter
+   21: from typing import Dict, List, Optional  # BAD SMELL: Optional tampoco se usa.
+   22: import unittest
+   23: 
+   24: 
+   25: # Fallback para line_profiler cuando no está instalado.
+   26: try:  # pragma: no cover - este bloque sólo se ejecuta si falta line_profiler
+   27: 	profile  # type: ignore[name-defined]
+   28: except NameError:  # pragma: no cover
+   29: 	def profile(func):  # type: ignore
+   30: 		return func
+```
+
+
+7.x) Código REFACTORIZADO (soluciones aplicadas)
+
+>>> Dataclass PlayerStats
+
+```
+   27: @dataclass
+```
+
+>>> Dataclass GameStatistics
+
+```
+   66: @dataclass
+```
+
+>>> Vectorización y batching en simulate_dice_game
+
+```
+  117: @profile
+```
+
+>>> Línea clave: generación y conteo vectorizado
+
+```
+  140: 
+  141: 	rng = np.random.default_rng(seed)
+  142: 	totals = np.zeros(num_players, dtype=np.int64)
+  143: 	frequencies = np.zeros((num_players, 6), dtype=np.int64)
+  144: 
+  145: 	rounds_remaining = num_rounds
+  146: 	while rounds_remaining > 0:
+  147: 		current_batch = min(batch_size, rounds_remaining)
+  148: 		rolls = rng.integers(1, 7, size=(current_batch, num_players), endpoint=False)
+  149: 		totals += rolls.sum(axis=0)
+  150: 		batch_frequencies = (rolls[..., None] == FACES).sum(axis=0)
+  151: 		frequencies += batch_frequencies  # Refactorización: Replace Loop with Vectorized Operation.
+  152: 		rounds_remaining -= current_batch
+  153: 
+  154: 	player_stats = _build_player_stats(totals, frequencies)
+  155: 
+  156: 	winner = max(player_stats, key=lambda p: p.total_points)
+```
+
+>>> _validate_inputs (validaciones)
+
+```
+   95: def _validate_inputs(num_players: int, num_rounds: int, batch_size: int) -> None:
+   96: 	"""Valida los parámetros de entrada de la simulación.
+   97: 
+   98: 	Refactorización: Introduce Parameter Validation.
+   99: 
+  100: 	Args:
+  101: 		num_players: Número de jugadores a simular (1-4).
+  102: 		num_rounds: Cantidad total de rondas por jugador.
+  103: 		batch_size: Tamaño de lote para la simulación.
+  104: 
+  105: 	Raises:
+  106: 		ValueError: Si algún parámetro queda fuera de los límites aceptados.
+  107: 	"""
+  108: 
+  109: 	if not 1 <= num_players <= 4:
+  110: 		raise ValueError("El número de jugadores debe estar entre 1 y 4")
+  111: 	if num_rounds <= 0:
+  112: 		raise ValueError("Las rondas deben ser mayores a cero")
+  113: 	if batch_size <= 0:
+  114: 		raise ValueError("El tamaño de lote debe ser mayor a cero")
+  115: 
+  116: 
+  117: @profile
+```
+
+>>> _build_player_stats (extract function)
+
+```
+  160: def _build_player_stats(totals: np.ndarray, frequencies: np.ndarray) -> List[PlayerStats]:
+  161: 	"""Convierte datos agregados en instancias ``PlayerStats``.
+  162: 
+  163: 	Refactorización: Extract Function + Encapsulate Collection.
+  164: 
+  165: 	Args:
+  166: 		totals: Vector con la suma de puntos por jugador.
+  167: 		frequencies: Matriz de frecuencias de caras por jugador.
+  168: 
+  169: 	Returns:
+  170: 		Lista ordenada de jugadores con sus estadísticas.
+  171: 	"""
+  172: 
+  173: 	return [
+  174: 		PlayerStats.from_arrays(player_idx + 1, frequencies[player_idx], totals[player_idx])
+  175: 		for player_idx in range(frequencies.shape[0])
+  176: 	]
+  177: 
+  178: 
+```
+
+>>> Tests de rango/probabilidad
+
+```
+  248: 	profiler.disable()
+  249: 	buffer = io.StringIO()
+  250: 	stats = pstats.Stats(profiler, stream=buffer)
+  251: 	stats.sort_stats("cumtime")
+  252: 	stats.print_stats(15)
+  253: 	return buffer.getvalue()
+  254: 
+  255: 
+  256: class DiceGameTests(unittest.TestCase):
+  257: 	"""Casos de prueba que aseguran la corrección estadística del simulador."""
+  258: 
+  259: 	def test_rolls_within_range(self) -> None:
+  260: 		stats = simulate_dice_game(4, 2_000, batch_size=500, seed=42)
+  261: 		for player in stats.players:
+  262: 			for face in player.frequencies.keys():
+  263: 				self.assertGreaterEqual(face, 1)
+  264: 				self.assertLessEqual(face, 6)
+```
+
+>>> CLI flags (--timeit / --profile / --run-tests)
+
+```
+    1: """Versión refactorizada y eficiente del simulador de dados."""
+    2: 
+    3: from __future__ import annotations
+    4: 
+    5: import argparse
+    6: import cProfile
+    7: import io
+    8: import timeit
+    9: from dataclasses import dataclass
+   10: from typing import Dict, List
+   11: 
+   12: import numpy as np
+   13: import pstats
+```

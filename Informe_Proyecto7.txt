@@ -1,0 +1,86 @@
+PROYECTO 7 – Simulación de un Juego de Dados
+Autor: Jesús Olariaga – López
+Archivo: Informe_Proyecto7.txt
+
+1) VERIFICACIÓN DE CUMPLIMIENTO DE LA CONSIGNA
+- Simulador para 1 a 4 jugadores: OK. Ambas versiones validan límites y soportan de 1 a 4 jugadores.
+- Estadísticas por jugador: OK. Se guarda número de tiradas, frecuencias por cara (1..6), total de puntos y valor más frecuente.
+- Determinación de ganador: OK. Se elige el jugador con mayor puntaje total.
+- Versión inicial con funciones repetidas y mala estructura: OK. Presenta duplicación, estado global y acoplamiento (ver sección 3).
+- Refactorización completa: OK. Se reemplazan bucles y estado global por vectorización, clases de datos y funciones puras.
+- Batching para millones de tiradas: OK. Se procesa en bloques configurables (batch_size) y se valida rendimiento a 1.000.000 de rondas.
+- Medición de rendimiento: OK. Se incluyen timeit y cProfile en ambas versiones.
+- line_profiler (kernprof): OK. Ambas versiones exponen funciones decoradas con @profile para inspección.
+- Tests estadísticos: OK. Se verifica que todas las tiradas están en [1..6] y que la suma de probabilidades ~ 1.0.
+
+2) ¿CÓMO SE IMPLEMENTÓ CADA PUNTO?
+2.1. Simulación de 1 a 4 jugadores
+- Sin refactor: funciones por jugador con lógica duplicada (_simular_jugador1..4) y validaciones de límites.
+- Refactor: una sola simulación vectorizada con NumPy que genera todas las tiradas por lote y jugador en una matriz.
+
+2.2. Estadísticas y ganador
+- Sin refactor: cálculo con Counter para frecuencias, total, valor más frecuente y un mensaje por jugador; ganador por máximo total.
+- Refactor: se encapsula en dataclasses PlayerStats y GameStatistics; se calcula most_common_value por argmax y winner por máximo de total_points.
+
+2.3. Batching (millones de tiradas)
+- Sin refactor: versión de batching ineficiente que re‑ejecuta la simulación por bloques y concatena resultados.
+- Refactor: procesamiento por lotes con tamaño configurable (por defecto 100.000), acumulando totales y frecuencias de forma vectorizada.
+
+2.4. Medición de rendimiento
+- cProfile: funciones dedicadas que capturan y ordenan por tiempo acumulado.
+- timeit: funciones/flags para repetir mediciones y obtener lista de duraciones.
+- line_profiler: uso de @profile y ejecución con “kernprof -l -v”.
+
+2.5. Tests de corrección estadística
+- Rango de tiradas: se comprueba que las caras están siempre entre 1 y 6.
+- Probabilidades: se evalúa que la distribución empírica por jugador suma ≈ 1 (tolerancia razonable).
+
+3) BAD SMELLS EN LA VERSIÓN SIN REFACTORIZAR Y TÉCNICAS DE REFACTORIZACIÓN
+- Código duplicado: cuatro funciones casi idénticas para jugadores 1..4 → “Replace Method with Parameter” + vectorización en simulate_dice_game.
+- Estado global compartido (GLOBAL_RESULTS, GLOBAL_LOG, GLOBAL_CONFIG) y efectos laterales → “Encapsulate Collection”, “Replace Global with Return Value / Objects” usando GameStatistics/PlayerStats.
+- Latencia artificial (time.sleep(0.01)) en cada tirada → eliminar latencia y reemplazar por generador vectorizado de enteros con NumPy.
+- Argumento mutable por defecto en guardar_en_cache → corrección implícita al eliminar ese flujo en la versión refactorizada y evitar mutaciones compartidas.
+- Lógica de presentación mezclada con cálculo (mensajes y prints acoplados) → separar dominio (estadísticas y ganador) de la capa CLI (main).
+- Manejo de excepciones genéricas (try/except vacío) que oculta errores → validaciones explícitas de parámetros y eliminación de capturas silenciosas.
+- Pruebas en el mismo archivo que la implementación → mantener tests pero estructurar clases de prueba independientes y reutilizar API estable (simulate_dice_game, simulate_probabilities).
+- Batching ineficiente que re‑invoca la simulación completa y concatena → batching real con acumulación de totales y frecuencias por lote.
+- Importaciones/constantes no usadas (math, Optional, TEXTO_FORMATO trivial) → limpiar dependencias en la versión refactorizada.
+
+Técnicas aplicadas (mapeo):
+- Extract Function / Extract Factory Method → _build_player_stats y PlayerStats.from_arrays
+- Encapsulate Collection → GameStatistics / PlayerStats con métodos claros
+- Replace Loop with Vectorized Operation → conteo de frecuencias y sumas con NumPy
+- Introduce Parameter Validation → _validate_inputs para límites de jugadores, rondas y batch
+- Preserve Whole Object → benchmark/profiling reutilizan la misma función de simulación
+- Replace Data with Object → distribuciones y resultados via objetos en lugar de dicts mixtos
+
+4) RESULTADOS DE RENDIMIENTO (valores provistos + cálculos de mejora)
+4.1. kernprof (line_profiler)
+- Sin refactor (función simular_juego_sin_refactor): 83.88180 s
+- Refactor (simulate_dice_game): 0.19532 s
+- Mejora ≈ ×429.46
+
+4.2. cProfile
+- Sin refactor: 41.805 s (dominado por time.sleep en _tirada_lenta).
+- Refactor: 0.172 s
+- Mejora ≈ ×243.05
+
+4.3. timeit (promedios de 3 corridas)
+- Sin refactor: 41.780 s  (corridas: 41.956, 41.755, 41.631)
+- Refactor: 0.168 s  (corridas: 0.178, 0.166, 0.159)
+- Mejora ≈ ×249.07
+
+Observación clave: en la versión sin refactor, el cuello de botella es la espera artificial de 10 ms por tirada, lo que explica que time.sleep concentre casi todo el tiempo de CPU. La versión refactorizada elimina esa latencia y utiliza vectorización, logrando mejoras de entre ×243 y ×429 según herramienta.
+
+5) COMANDOS ÚTILES (usados/esperados)
+- line_profiler:   py -m kernprof -l -v .\CodigoSinRefactorizar.py
+                   py -m kernprof -l -v .\CodigoRefactorizado.py
+- cProfile (flag): python .\CodigoSinRefactorizar.py --profile
+                   python .\CodigoRefactorizado.py --profile
+- timeit (flag):   python .\CodigoSinRefactorizar.py --timeit
+                   python .\CodigoRefactorizado.py --timeit
+- tests:           python .\CodigoSinRefactorizar.py --run-tests
+                   python .\CodigoRefactorizado.py   --run-tests
+
+6) CONCLUSIÓN
+La refactorización cumple la consigna y mejora drásticamente el rendimiento gracias a: (a) eliminación de latencia artificial; (b) generación vectorizada de tiradas; (c) acumulación por lotes; (d) encapsulación del modelo de dominio en dataclasses y validaciones de parámetros; (e) API estable que facilita testing y medición.
