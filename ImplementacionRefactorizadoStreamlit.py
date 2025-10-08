@@ -65,6 +65,8 @@ def _ensure_state() -> None:
 	st.session_state.setdefault("round", 0)
 	st.session_state.setdefault("history", [])
 	st.session_state.setdefault("last_faces", [1, 1, 1, 1])
+	st.session_state.setdefault("finished", False)
+	st.session_state.setdefault("winner_info", None)
 
 
 def _safe_rerun() -> None:
@@ -102,6 +104,8 @@ def _reset_game() -> None:
 	st.session_state["round"] = 0
 	st.session_state["history"] = []
 	st.session_state["last_faces"] = [1, 1, 1, 1]
+	st.session_state["finished"] = False
+	st.session_state["winner_info"] = None
 
 
 def _render_scoreboard() -> None:
@@ -141,8 +145,8 @@ def _render_game_view() -> None:
 
 	# FIX: Para evitar que el contador de ronda quede "una por detrás" mostramos el botón primero,
 	# procesamos la acción y luego pintamos el encabezado con el valor actualizado.
-	lanzar = st.button("Lanzar dados 🎲")
-	if lanzar:
+	lanzar = st.button("Lanzar dados 🎲", disabled=st.session_state.get("finished", False))
+	if lanzar and not st.session_state.get("finished", False):
 		final_faces = [random.randint(1, 6) for _ in range(4)]
 		_animate_roll(placeholders, final_faces)
 		st.session_state["last_faces"] = final_faces
@@ -166,11 +170,34 @@ def _render_game_view() -> None:
 	current_round_display = st.session_state["round"] if st.session_state["round"] > 0 else 1
 	st.markdown(f"### Ronda actual: {current_round_display}")
 
-	_reset_col, _ = st.columns([1, 3])
-	with _reset_col:
-		if st.button("Reiniciar partida", type="secondary"):
-			_reset_game()
-			_safe_rerun()
+	col_actions, _ = st.columns([2, 3])
+	with col_actions:
+		c1, c2 = st.columns(2)
+		with c1:
+			if st.button("Reiniciar partida", type="secondary"):
+				_reset_game()
+				_safe_rerun()
+		with c2:
+			if st.button("Finalizar juego", disabled=st.session_state.get("finished", False)):
+				# Determinar ganador y marcar estado finalizado
+				scores = st.session_state["scores"]
+				max_score = max(scores)
+				winners = [i + 1 for i, sc in enumerate(scores) if sc == max_score]
+				st.session_state["finished"] = True
+				st.session_state["winner_info"] = {"puntaje": max_score, "ganadores": winners}
+
+	# Mostrar panel de ganador si el juego fue finalizado
+	if st.session_state.get("finished", False) and st.session_state.get("winner_info"):
+		info = st.session_state["winner_info"]
+		ganadores = info["ganadores"]
+		if len(ganadores) == 1:
+			st.success(f"Juego finalizado. Ganador: Jugador {ganadores[0]} con {info['puntaje']} puntos.")
+		else:
+			st.warning(
+				"Juego finalizado. Empate entre: "
+				+ ", ".join(f"Jugador {g}" for g in ganadores)
+				+ f" (todos con {info['puntaje']} puntos)."
+			)
 
 	_render_scoreboard()
 	_render_history()
