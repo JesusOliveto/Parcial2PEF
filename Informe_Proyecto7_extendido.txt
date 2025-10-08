@@ -39,7 +39,7 @@ Archivo: Informe_Proyecto7.txt
 - Código duplicado: cuatro funciones casi idénticas para jugadores 1..4 → “Replace Method with Parameter” + vectorización en simulate_dice_game.
 - Estado global compartido (GLOBAL_RESULTS, GLOBAL_LOG, GLOBAL_CONFIG) y efectos laterales → “Encapsulate Collection”, “Replace Global with Return Value / Objects” usando GameStatistics/PlayerStats.
 - Latencia artificial (time.sleep(0.01)) en cada tirada → eliminar latencia y reemplazar por generador vectorizado de enteros con NumPy.
--(puaj) Argumento mutable por defecto en guardar_en_cache → corrección implícita al eliminar ese flujo en la versión refactorizada y evitar mutaciones compartidas.
+-Argumento mutable por defecto en guardar_en_cache → corrección implícita al eliminar ese flujo en la versión refactorizada y evitar mutaciones compartidas.
 - Lógica de presentación mezclada con cálculo (mensajes y prints acoplados) → separar dominio (estadísticas y ganador) de la capa CLI (main).
 - Manejo de excepciones genéricas (try/except vacío) que oculta errores → validaciones explícitas de parámetros y eliminación de capturas silenciosas.
 - Pruebas en el mismo archivo que la implementación → mantener tests pero estructurar clases de prueba independientes y reutilizar API estable (simulate_dice_game, simulate_probabilities).
